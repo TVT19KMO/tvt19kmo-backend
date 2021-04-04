@@ -4,34 +4,34 @@ const router = express.Router();
 
 var taskList = [
     {
-        "Name": "Vacuuming",
-        "Note": "Vacuum under sofa",
-        "Points": 20,
-        "Room": "Livingroom"
+        "name": "Vacuuming",
+        "note": "Vacuum under sofa",
+        "points": 20,
+        "room": "Livingroom"
     }, 
     {
-        "Name": "Empty trash",
-        "Note": "Empty kitchen trash can",
-        "Points": 10,
-        "Room": "Kitchen"
+        "name": "Empty trash",
+        "note": "Empty kitchen trash can",
+        "points": 10,
+        "room": "Kitchen"
     },
     {
-        "Name": "Wash dishes",
-        "Note": "Washe dishes at kitchen",
-        "Points": 30,
-        "Room": "Kitchen"
+        "name": "Wash dishes",
+        "note": "Washe dishes at kitchen",
+        "points": 30,
+        "room": "Kitchen"
     },
     {
-        "Name": "Dust",
-        "Note": "Dust tables",
-        "Points": 15,
-        "Room": "Livingroom"
+        "name": "Dust",
+        "note": "Dust tables",
+        "points": 15,
+        "room": "Livingroom"
     },
     {
-        "Name": "Vacuuming",
-        "Note": "Vacuum bedroom",
-        "Points": 20,
-        "Room": "Bedroom"
+        "name": "Vacuuming",
+        "note": "Vacuum bedroom",
+        "points": 20,
+        "room": "Bedroom"
     }]
 
 router.get('/', (req, res) => {
