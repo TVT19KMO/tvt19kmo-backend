@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const router = express.Router();
-// tasks
+
 var taskList = [
     {
         "name": "Vacuuming",
