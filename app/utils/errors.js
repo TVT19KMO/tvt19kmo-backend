@@ -1,5 +1,7 @@
 //@ts-check
 
+const _ = require("lodash");
+
 /**
  * This module contains some general-purpose
  * functions to create errors. Also some
@@ -18,10 +20,6 @@
 
 /**
  * @typedef {Error} ResponseError
- */
-
-/**
- * @typedef {(string?) => ResponseError} ErrorCreator
  */
 
 /**
@@ -45,7 +43,7 @@ const unauthorized = {
 /**
  * @type {ErrorType}
  */
-export const forbidden = {
+const forbidden = {
   message: "Access Forbidden",
   code: 403,
   strCode: "403",
@@ -54,7 +52,7 @@ export const forbidden = {
 /**
  * @type {ErrorType}
  */
-export const notFound = {
+const notFound = {
   message: "Not Found",
   code: 404,
   strCode: "404",
@@ -63,7 +61,7 @@ export const notFound = {
 /**
  * @type {ErrorType}
  */
-export const conflict = {
+const conflict = {
   code: 409,
   strCode: "409",
   message: null,
@@ -72,13 +70,13 @@ export const conflict = {
 /**
  * @type {ErrorType}
  */
-export const server = {
+const server = {
   message: "Something went wrong :(",
   code: 500,
   strCode: "500",
 };
 
-export const errors = {
+const errors = {
   badRequest,
   unauthorized,
   forbidden,
@@ -88,26 +86,29 @@ export const errors = {
 };
 
 /**
- * Simple function to return error creator
- * for the given error type.
+ * Returns
  * @param {ErrorType} errorType
- * @returns {ErrorCreator}
  */
-const errorCreator = (errorType) => (message = errorType.message) => {
+const createError = (errorType, message = errorType.message) => {
   const { strCode } = errorType;
   const error = new Error(message);
   error.name = strCode;
   return error;
 };
 
-/** @type {ErrorCreator} */
-export const badRequestError = errorCreator(badRequest);
+const badRequestError = _.partial(createError, badRequest);
 
-/** @type {ErrorCreator} */
-export const unauthorizedError = errorCreator(unauthorized);
+const unauthorizedError = _.partial(createError, unauthorized);
 
-/** @type {ErrorCreator} */
-export const forbiddenError = errorCreator(forbidden);
+const forbiddenError = _.partial(createError, forbidden);
 
-/** @type {ErrorCreator} */
-export const notFoundError = errorCreator(notFound);
+const notFoundError = _.partial(createError, notFound);
+
+module.exports = {
+  errors,
+  createError,
+  badRequestError,
+  unauthorizedError,
+  forbiddenError,
+  notFoundError,
+};
