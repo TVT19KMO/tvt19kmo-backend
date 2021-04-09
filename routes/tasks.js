@@ -5,38 +5,6 @@ const Task = require('../models/task');
 const router = express.Router();
 router.use(bodyParser.json())
 
-var taskList = [
-    {
-        "name": "Vacuuming",
-        "note": "Vacuum under sofa",
-        "points": 20,
-        "room": "Livingroom"
-    }, 
-    {
-        "name": "Empty trash",
-        "note": "Empty kitchen trash can",
-        "points": 10,
-        "room": "Kitchen"
-    },
-    {
-        "name": "Wash dishes",
-        "note": "Washe dishes at kitchen",
-        "points": 30,
-        "room": "Kitchen"
-    },
-    {
-        "name": "Dust",
-        "note": "Dust tables",
-        "points": 15,
-        "room": "Livingroom"
-    },
-    {
-        "name": "Vacuuming",
-        "note": "Vacuum bedroom",
-        "points": 20,
-        "room": "Bedroom"
-    }]
-
 router.get('/', (req, res) => {
     //res.json(taskList)
     Task.find()
@@ -46,10 +14,15 @@ router.get('/', (req, res) => {
 
 router.post('/', (req, res) => {
    const task = new Task({     
-       name: req.body.name,
-       note: req.body.note,
-       points: req.body.points,
-       room: req.body.room
+        taskName: req.body.taskName,
+        creatingDate: req.body.creatingDate,
+        dueDate: req.body.dueDate,
+        once: req.body.once,
+        note: req.body.note,
+        room: req.body.room,
+        points: req.body.points,
+        reward: req.body.reward,
+        assignedTo: req.body.assignedTo
     })
 
    task.save()
@@ -60,10 +33,15 @@ router.post('/', (req, res) => {
 router.put('/:id', (req, res) => {
     Task.findById(req.params.id)
         .then(task => {
-            task.name = req.body.name,
-            task.note = req.body.note,
-            task.points = req.body.points,
-            task.room = req.body.room
+            taskName = req.body.taskName,
+            creatingDate = req.body.creatingDate,
+            dueDate = req.body.dueDate,
+            once = req.body.once,
+            note = req.body.note,
+            room = req.body.room,
+            points = req.body.points,
+            reward = req.body.reward,
+            assignedTo = req.body.assignedTo
 
             task.save()
             .then(result => res.status(200).json(result))
