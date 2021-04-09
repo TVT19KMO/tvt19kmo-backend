@@ -6,6 +6,7 @@ const router = express.Router();
 router.use(bodyParser.json());
 
 router.get("/", (req, res) => {
+  //res.json(taskList)
   Task.find()
     .then((tasks) => res.status(200).json(tasks))
     .catch((error) => res.status(400).json("Error" + error));
@@ -13,29 +14,39 @@ router.get("/", (req, res) => {
 
 router.post("/", (req, res) => {
   const task = new Task({
-    name: req.body.name,
+    taskName: req.body.taskName,
+    creatingDate: req.body.creatingDate,
+    dueDate: req.body.dueDate,
+    once: req.body.once,
     note: req.body.note,
-    points: req.body.points,
     room: req.body.room,
+    points: req.body.points,
+    reward: req.body.reward,
+    assignedTo: req.body.assignedTo,
   });
 
   task
     .save()
-    .then((result) => res.status(201).json(result))
+    .then(() => res.status(201).json("Task created"))
     .catch((error) => res.status(400).json({ message: error }));
 });
 
 router.put("/:id", (req, res) => {
-  Task.findById(req.params.id)
+  Task.findByIdAndUpdate({ _id: req.params.id }, req.body)
     .then((task) => {
-      (task.name = req.body.name),
-        (task.note = req.body.note),
-        (task.points = req.body.points),
-        (task.room = req.body.room);
+      (taskName = req.body.taskName),
+        (creatingDate = req.body.creatingDate),
+        (dueDate = req.body.dueDate),
+        (once = req.body.once),
+        (note = req.body.note),
+        (room = req.body.room),
+        (points = req.body.points),
+        (reward = req.body.reward),
+        (assignedTo = req.body.assignedTo);
 
       task
         .save()
-        .then((result) => res.status(200).json(result))
+        .then(() => res.status(200).json("Task updated"))
         .catch((error) => res.status(400).json({ message: error }));
     })
     .catch((error) => res.status(400).json("error" + error));
