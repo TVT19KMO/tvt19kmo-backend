@@ -105,6 +105,12 @@ const forbiddenError = _.partial(createError, forbidden);
 const notFoundError = _.partial(createError, notFound);
 
 module.exports = {
+  server,
+  conflict,
+  badRequest,
+  notFound,
+  unauthorized,
+  forbidden,
   errors,
   createError,
   badRequestError,
