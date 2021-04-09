@@ -25,13 +25,14 @@ router.post('/', (req, res) => {
     })
 
    user.save()
-   .then(result => res.status(201).json(result))
+   .then(() => res.status(201).json("Use created"))
    .catch(error => res.status(400).json({message: error}))
     
 })
 
-router.put('/', (req, res) => {
-    User.findById(req.params.id)
+router.put('/:id', (req, res) => {
+    
+    User.findByIdAndUpdate({ _id: req.params.id }, req.body)
         .then(user => {
             firstName = req.body.firstName,
             lastName = req.body.lastName,
@@ -42,16 +43,16 @@ router.put('/', (req, res) => {
             role = req.body.role,
             playTime = req.body.playTime,
             tasksDone = req.body.tasksDone
-
+                
             user.save()
-            .then(result => res.status(200).json(result))
+            .then(() => res.status(200).json("User updated"))
             .catch(error => res.status(400).json({message: error}))
         })
         .catch((error) => res.status(400).json("error" + error)) 
     
 })
 
-router.delete('/', (req, res) => {
+router.delete('/:id', (req, res) => {
     User.findByIdAndDelete(req.params.id)
         .then(() => res.status(202).json("User deleted"))
         .catch((error) => res.status(400).json("error" + error))   

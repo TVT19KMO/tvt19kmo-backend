@@ -26,12 +26,12 @@ router.post('/', (req, res) => {
     })
 
    task.save()
-   .then(result => res.status(201).json(result))
+   .then(() => res.status(201).json("Task created"))
    .catch(error => res.status(400).json({message: error}))
 })
 
 router.put('/:id', (req, res) => {
-    Task.findById(req.params.id)
+    Task.findByIdAndUpdate({_id: req.params.id}, req.body)
         .then(task => {
             taskName = req.body.taskName,
             creatingDate = req.body.creatingDate,
@@ -44,7 +44,7 @@ router.put('/:id', (req, res) => {
             assignedTo = req.body.assignedTo
 
             task.save()
-            .then(result => res.status(200).json(result))
+            .then(() => res.status(200).json("Task updated"))
             .catch(error => res.status(400).json({message: error}))
         })
         .catch((error) => res.status(400).json("error" + error))    
