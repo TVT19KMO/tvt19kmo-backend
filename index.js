@@ -14,6 +14,9 @@ app.use('/api/tasks', taskRoute);
 app.use('/api/rewards', rewardRoute);
 app.use('/api/users', userRoute);
 
+app.get('/', (req,res) => {
+    res.send("Welcome to game-management-api");
+});
 
 app.listen(port, () => console.log(`Server running in port ${port}`));
 
