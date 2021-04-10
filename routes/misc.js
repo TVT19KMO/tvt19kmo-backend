@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const TaskDifficulty = require("../models/taskDifficulty");
 
-const taskDifficulties = [
+const initialTaskDifficulties = [
   {
     level: 1,
     reward: 50,
@@ -31,7 +31,7 @@ router.get("/task-difficulties", async (req, res) => {
  */
 router.post("/task-difficulties/seed", async (_, res) => {
   await TaskDifficulty.deleteMany({});
-  await TaskDifficulty.insertMany(taskDifficulties);
+  await TaskDifficulty.insertMany(initialTaskDifficulties);
   res.status(201).end();
 });
 

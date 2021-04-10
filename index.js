@@ -1,10 +1,18 @@
 const express = require("express");
 const app = express();
 const port = process.env.PORT || 5000;
+const path = require("path");
 require("./database/connection");
-const bodyParser = require("body-parser");
+const i18n = require("i18n");
 
-var cors = require("cors");
+i18n.configure({
+  locales: ["en", "fi"],
+  directory: path.join(__dirname, "locales"),
+});
+
+app.use(i18n.init);
+
+const cors = require("cors");
 app.use(cors());
 app.use(express.json());
 
