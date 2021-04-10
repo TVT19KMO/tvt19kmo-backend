@@ -20,7 +20,7 @@ app.use('/api/products', productsRoute);
 
 
 app.get('/', (req,res) => {
-    res.send("Welcome to game-management-api");
+    res.send("Welcome to game-management-api. This is main page");
 });
 
 app.listen(port, () => console.log(`Server running in port ${port}`));
