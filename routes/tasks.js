@@ -24,7 +24,7 @@ router.post('/', (req, res) => {
         reward: req.body.reward,
         assignedTo: req.body.assignedTo
     })
-
+    
    task.save()
    .then(() => res.status(200).json({message: "Task created"}))
    .catch(error => res.status(400).json({message: error}))
