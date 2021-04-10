@@ -58,7 +58,7 @@ const errorHandler = (error, _, res, next) => {
         .json({ message: badRequest.message, detail: error.message });
       break;
     // Triggers when JSON web token cannot be fetched.
-    case "JsonWebTokenError":
+    case "JsonWebTokenError": 
     // User is not authenticated.
     case unauthorized.strCode:
       res.status(unauthorized.code).json({ message: unauthorized.message });
