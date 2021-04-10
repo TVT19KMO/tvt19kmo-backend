@@ -1,6 +1,6 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const Task = require('../models/task');
+const express = require("express");
+const bodyParser = require("body-parser");
+const Task = require("../models/task");
 
 const router = express.Router();
 router.use(bodyParser.json())
@@ -24,6 +24,7 @@ router.post('/', (req, res) => {
         reward: req.body.reward,
         assignedTo: req.body.assignedTo
     })
+    .catch((error) => res.status(400).json("error" + error));
 
    task.save()
    .then(() => res.status(200).json({message: "Task created"}))
