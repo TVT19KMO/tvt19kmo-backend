@@ -2,9 +2,11 @@ const express = require("express");
 const app = express();
 const port = process.env.PORT || 5000;
 require("./database/connection");
+const bodyParser = require("body-parser");
 
 var cors = require("cors");
 app.use(cors());
+app.use(express.json());
 
 const taskRoute = require("./routes/tasks");
 const rewardRoute = require("./routes/rewards");

@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const { stripe } = require("../app/utils");
+const stripe = require("../app/utils/stripe");
 
 const router = Router();
 
@@ -15,7 +15,6 @@ const calculateOrderAmount = (items) => {
 
 router.post("/create-payment-intent", async (req, res) => {
   const { items } = req.body;
-
   // Create a PaymentIntent with the order amount and currency
 
   const paymentIntent = await stripe.paymentIntents.create({
