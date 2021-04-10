@@ -1,62 +1,68 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const User = require('../models/user');
-
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 const router = express.Router();
 router.use(bodyParser.json())
 
 router.get('/', (req, res) => {
     User.find()
     .then(users => res.status(200).json(users))
-    .catch(error => res.status(400).json('Error' + error) )
+    .catch(error => res.status(400).json({error: error}))
 })
 
-router.post('/', (req, res) => {
-    const user = new User({     
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        email: req.body.email,
-        dateOfBirth: req.body.dateOfBirth,
-        emailVerified: req.body.emailVerified,
-        createDate: req.body.createDate,
-        role: req.body.role,
-        playTime: req.body.playTime,
-        tasksDone: req.body.tasksDone
-    })
+router.post('/register', (req, res) => {
 
-   user.save()
-   .then(() => res.status(201).json("Use created"))
-   .catch(error => res.status(400).json({message: error}))
-    
-})
+    User.findOne({ username: req.body.username }, (error, user) => {
+        if(user) {
+            return res.status(403).json({message: "User already exists"})
+        }
 
-router.put('/:id', (req, res) => {
-    
-    User.findByIdAndUpdate({ _id: req.params.id }, req.body)
-        .then(user => {
-            firstName = req.body.firstName,
-            lastName = req.body.lastName,
-            email = req.body.dueDemailate,
-            dateOfBirth = req.body.dateOfBirth,
-            emailVerified = req.body.emailVerified,
-            createDate = req.body.createDate,
-            role = req.body.role,
-            playTime = req.body.playTime,
-            tasksDone = req.body.tasksDone
-                
+        else {
+            const hash_password = bcrypt.hashSync(req.body.password, 10);
+            const user = new User({     
+                username: req.body.username,
+                password: hash_password
+            })
+            
             user.save()
-            .then(() => res.status(200).json("User updated"))
-            .catch(error => res.status(400).json({message: error}))
-        })
-        .catch((error) => res.status(400).json("error" + error)) 
-    
+            .then(() => res.status(200).json({message: "New user added"}))
+            .catch(error => res.status(400).json({error: error}))
+
+        }     
+    })
+    .catch(error => res.status(500).json({error: error}))
+})
+
+router.post('/login', (req, res) => {  
+    User.findOne({ username: req.body.username }, (error, user) => {
+        if(user) {
+            bcrypt.compare(req.body.password, user.password, function(error, result){
+                if(result) {
+                    return res.status(200).json({message: "Login successfull"})
+                }               
+                else {
+                    return res.status(401).json({message: "Invalid password"})
+                }
+               })
+        }
+        else {
+            return res.status(400).json({message: "Invalid username"})
+        }
+    })
+    .catch(error => res.status(500).json({error: error}))
 })
 
 router.delete('/:id', (req, res) => {
-    User.findByIdAndDelete(req.params.id)
-        .then(() => res.status(202).json("User deleted"))
-        .catch((error) => res.status(400).json("error" + error))   
-    
+    User.findByIdAndDelete(req.params.id, (error, result) => {
+        if(result) {
+            return res.status(200).json({message: "User deleted"})
+        }
+        else {
+            return res.status(400).json({message: "Not found"})
+        }
+    })
 })
 
 module.exports = router;

@@ -9,7 +9,7 @@ router.get('/', (req, res) => {
     //res.json(taskList)
     Task.find()
     .then(tasks => res.status(200).json(tasks))
-    .catch(error => res.status(400).json('Error' + error) )
+    .catch(error => res.status(400).json({message: error}))
 })
 
 router.post('/', (req, res) => {
@@ -26,7 +26,7 @@ router.post('/', (req, res) => {
     })
 
    task.save()
-   .then(() => res.status(201).json("Task created"))
+   .then(() => res.status(200).json({message: "Task created"}))
    .catch(error => res.status(400).json({message: error}))
 })
 
@@ -44,16 +44,21 @@ router.put('/:id', (req, res) => {
             assignedTo = req.body.assignedTo
 
             task.save()
-            .then(() => res.status(200).json("Task updated"))
+            .then(() => res.status(200).json({message: "Task updated"}))
             .catch(error => res.status(400).json({message: error}))
         })
-        .catch((error) => res.status(400).json("error" + error))    
+        .catch(() => res.status(500).json({message: "Not found"}))    
 })
 
 router.delete('/:id', (req, res) => {
-    Task.findByIdAndDelete(req.params.id)
-        .then(() => res.status(202).json("Task deleted"))
-        .catch((error) => res.status(400).json("error" + error))   
+    Task.findByIdAndDelete(req.params.id, (error, result) => {
+        if(result) {
+            return res.status(200).json({message: "Task deleted"})
+        }      
+        else {
+            return res.status(400).json({message: "Not found"})
+        }
+    })
 })
 
 module.exports = router;

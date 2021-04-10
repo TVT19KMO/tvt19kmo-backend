@@ -4,7 +4,7 @@ const mongoose = require('mongoose')
 
 //import { rewardSchema } from './reward';  KONSTA
 
-const r = require('./reward')
+//const r = require('./reward')
 
 
             //import { userSchema } from '/user';   KONSTA
