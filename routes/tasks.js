@@ -1,7 +1,6 @@
 const express = require("express");
-
 const Task = require("../models/task");
-
+const cAuth = require('../utils/auth')
 const router = express.Router();
 
 router.get("/", (req, res) => {
@@ -11,7 +10,7 @@ router.get("/", (req, res) => {
     .catch((error) => res.status(400).json({ message: error }));
 });
 
-router.post("/", (req, res) => {
+router.post("/", cAuth.checkAuth,(req, res) => {
   const task = new Task({
     taskName: req.body.taskName,
     creatingDate: req.body.creatingDate,
@@ -30,7 +29,7 @@ router.post("/", (req, res) => {
     .catch((error) => res.status(400).json({ message: error }));
 });
 
-router.put("/:id", (req, res) => {
+router.put("/:id", cAuth.checkAuth, (req, res) => {
   Task.findByIdAndUpdate({ _id: req.params.id }, req.body)
     .then((task) => {
       (taskName = req.body.taskName),
@@ -51,7 +50,7 @@ router.put("/:id", (req, res) => {
     .catch(() => res.status(500).json({ message: "Not found" }));
 });
 
-router.delete("/:id", (req, res) => {
+router.delete("/:id", cAuth.checkAuth, (req, res) => {
   Task.findByIdAndDelete(req.params.id, (error, result) => {
     if (result) {
       return res.status(200).json({ message: "Task deleted" });

@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const User = require('../models/user');
 const jwt = require('jsonwebtoken');
+const cAuth = require('../utils/auth')
 const bcrypt = require('bcrypt');
 const router = express.Router();
 router.use(bodyParser.json())
@@ -38,9 +39,16 @@ router.post('/register', (req, res) => {
 router.post('/login', (req, res) => {  
     User.findOne({ username: req.body.username }, (error, user) => {
         if(user) {
-            bcrypt.compare(req.body.password, user.password, function(error, result){
+            bcrypt.compare(req.body.password, user.password, (error, result) => {
                 if(result) {
-                    return res.status(200).json({message: "Login successfull"})
+                    
+                    // creates access token
+                    jwt.sign({username: req.body.UserName}, 'secretkey', { expiresIn: '1800s'}, (err, token) => {                    
+                        return res.status(200).json({
+                            Message: "Login successful",
+                            Token: token,
+                        })
+                    })      
                 }               
                 else {
                     return res.status(401).json({message: "Invalid password"})
@@ -54,7 +62,7 @@ router.post('/login', (req, res) => {
     .catch(error => res.status(500).json({error: error}))
 })
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', cAuth.checkAuth, (req, res) => {
     User.findByIdAndDelete(req.params.id, (error, result) => {
         if(result) {
             return res.status(200).json({message: "User deleted"})
