@@ -1,18 +1,28 @@
 const express = require("express");
 const app = express();
 const port = process.env.PORT || 5000;
-const path = require("path");
+
 require("./database/connection");
-const i18n = require("i18n");
 
-i18n.configure({
-  locales: ["en", "fi"],
-  directory: path.join(__dirname, "locales"),
-});
-
-app.use(i18n.init);
-
+const i18next = require("i18next");
+const Backend = require("i18next-node-fs-backend");
+const middleware = require("i18next-http-middleware");
 const cors = require("cors");
+
+i18next
+  .use(Backend)
+  .use(middleware.LanguageDetector)
+  .init({
+    fallbackLng: "en",
+    preload: ["en", "fi"],
+    ns: ["translation"],
+    defaultNS: "translation",
+    backend: {
+      loadPath: "locales/{{lng}}/{{ns}}.json",
+    },
+  });
+
+app.use(middleware.handle(i18next));
 app.use(cors());
 app.use(express.json());
 
@@ -30,7 +40,7 @@ app.use("/api/payments", paymentsRoute);
 app.use("/api/products", productsRoute);
 app.use("/api", miscRoute);
 
-app.get("/", (req, res) => {
+app.get("/", (_, res) => {
   res.send("Welcome to game-management-api. This is main page");
 });
 

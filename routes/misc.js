@@ -1,38 +1,18 @@
 const router = require("express").Router();
-const TaskDifficulty = require("../models/taskDifficulty");
 
-const initialTaskDifficulties = [
-  {
-    level: 1,
-    reward: 50,
-  },
-  {
-    level: 2,
-    reward: 100,
-  },
-  {
-    level: 3,
-    reward: 200,
-  },
-];
+const { getTaskDifficulties } = require("../queries/taskDifficulties");
+const { getTaskRooms } = require("../queries/taskRooms");
 
 /**
  * [GET] /task-difficulties
  * Returns all available task difficulties.
  */
-router.get("/task-difficulties", async (req, res) => {
-  const taskDifficulties = await TaskDifficulty.find({});
-  res.json(taskDifficulties);
-});
+router.get("/task-difficulties", getTaskDifficulties);
 
 /**
- * [POST] /task-difficulties/seed
- * Initializes database with default task difficulties.
+ * [GET] /task-rooms
+ * Returns all available task rooms.
  */
-router.post("/task-difficulties/seed", async (_, res) => {
-  await TaskDifficulty.deleteMany({});
-  await TaskDifficulty.insertMany(initialTaskDifficulties);
-  res.status(201).end();
-});
+router.get("/task-rooms", getTaskRooms);
 
 module.exports = router;

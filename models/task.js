@@ -1,70 +1,61 @@
 //import mongoose from 'mongoose';      KONSTA
 //const validator = require('validator')    KONSTA
 const mongoose = require("mongoose");
+const { cleanup } = require("./utils");
 
-//import { rewardSchema } from './reward';  KONSTA
+const taskSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+      cast: false,
+    },
 
-//const r = require('./reward')
+    note: {
+      type: String,
+      cast: false,
+    },
 
-//import { userSchema } from '/user';   KONSTA
-//const userSchema = require('.user/userSchema')
+    room: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "TaskRoom",
+      cast: false,
+    },
 
-const Schema = mongoose.Schema;
+    difficulty: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "TaskDifficulty",
+      cast: false,
+    },
 
-/*
-const isValidDate = dateString => {
-    var regEx = /^\d{4}-\d{2}-\d{2}$/;
-    return dateString.match(regEx) != null;
-};
-*/
-//Schema of the user
-const taskSchema = new Schema({
-  taskName: {
-    type: String,
-    required: true,
-    cast: false,
-  },
-  creatingDate: {
-    type: Date,
-    default: Date.now,
-  },
-  dueDate: {
-    type: String,
-    date: true,
-    cast: false,
-  },
-  once: {
-    type: Boolean,
-    required: true,
-    cast: false,
-  },
-  note: {
-    type: String,
-    cast: false,
-  },
-  room: {
-    type: String,
-    required: true,
-    cast: false,
-  },
+    created: {
+      type: Date,
+      default: Date.now,
+    },
 
-  difficulty: {
-    type: { type: mongoose.Schema.Types.ObjectId, ref: "TaskDifficulty" },
-  },
+    finished: {
+      type: Date,
+      cast: false,
+    },
 
-  reward: {
-    type: { type: mongoose.Schema.Types.ObjectId, ref: "Reward" },
-    //required: true,
-    //cast: false,
+    assignedTo: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      cast: false,
+    },
   },
+  {
+    toObject: {
+      transform: (_, ret) => {
+        cleanup(ret);
+      },
+    },
+    toJSON: {
+      transform: (_, ret) => {
+        cleanup(ret);
+      },
+    },
+  }
+);
 
-  assignedTo: {
-    type: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-    //type: userSchema,
-    //required: true,
-    //cast: false,
-  },
-});
-
-const Task = mongoose.model("Task", taskSchema);
-module.exports = Task;
+module.exports = mongoose.model("Task", taskSchema);

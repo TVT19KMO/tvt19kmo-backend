@@ -1,15 +1,11 @@
 const express = require("express");
+const { getTasks } = require("../queries/tasks");
 
 const Task = require("../models/task");
 
 const router = express.Router();
 
-router.get("/", (req, res) => {
-  //res.json(taskList)
-  Task.find()
-    .then((tasks) => res.status(200).json(tasks))
-    .catch((error) => res.status(400).json({ message: error }));
-});
+router.get("/", getTasks);
 
 router.post("/", (req, res) => {
   const task = new Task({
