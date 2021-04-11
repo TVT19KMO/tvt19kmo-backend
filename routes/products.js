@@ -5,7 +5,7 @@ const router = Router();
 
 router.get("", async (req, res) => {
   const { data: prices } = await stripe.prices.list();
-  console.log(prices);
+
   res.json(
     prices.map(({ id, nickname, unit_amount, product }) => ({
       price: +unit_amount / 100,
