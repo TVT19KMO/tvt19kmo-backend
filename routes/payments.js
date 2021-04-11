@@ -32,13 +32,16 @@ router.post("/create-payment-intent", async (req, res) => {
  * Handles product purchase by creating checkout session with Stripe.
  */
 router.post("/create-checkout-session", async (req, res) => {
-  const { items } = req.body;
+  const { items, route } = req.body;
+  console.log(items);
+  console.log(route);
 
   const { id } = await stripe.checkout.sessions.create({
     payment_method_types: ["card"],
     line_items: items,
     mode: "payment",
-    success_url: "http://localhost:3000/tvt19kmo-app/#",
+    success_url: route,
+    cancel_url: route,
   });
 
   res.json({ id });
