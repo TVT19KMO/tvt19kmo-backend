@@ -31,6 +31,7 @@ const rewardRoute = require("./routes/rewards");
 const userRoute = require("./routes/users");
 const paymentsRoute = require("./routes/payments");
 const productsRoute = require("./routes/products");
+const authRoute = require("./routes/authentication");
 const miscRoute = require("./routes/misc");
 
 app.use("/api/tasks", taskRoute);
@@ -38,6 +39,7 @@ app.use("/api/rewards", rewardRoute);
 app.use("/api/users", userRoute);
 app.use("/api/payments", paymentsRoute);
 app.use("/api/products", productsRoute);
+app.use("/api/authenticate", authRoute);
 app.use("/api", miscRoute);
 
 app.get("/", (_, res) => {
