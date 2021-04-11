@@ -1,0 +1,14 @@
+{
+  "difficulties": {
+    "1": "easy",
+    "2": "intermediate",
+    "3": "challenging"
+  },
+  "rooms": {
+    "living_room": "living room",
+    "bathroom": "bathroom",
+    "kitchen": "kitchen",
+    "dining_room": "dining room",
+    "bedroom": "bedroom"
+  }
+}

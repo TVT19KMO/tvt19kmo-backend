@@ -1,0 +1,14 @@
+{
+  "difficulties": {
+    "1": "helppo",
+    "2": "keskivaikea",
+    "3": "haastava"
+  },
+  "rooms": {
+    "living_room": "olohuone",
+    "bathroom": "vessa",
+    "kitchen": "keittiö",
+    "dining_room": "ruokasali",
+    "bedroom": "makuuhuone"
+  }
+}

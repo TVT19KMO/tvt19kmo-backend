@@ -1,9 +1,28 @@
 const express = require("express");
 const app = express();
 const port = process.env.PORT || 5000;
+
 require("./database/connection");
 
-var cors = require("cors");
+const i18next = require("i18next");
+const Backend = require("i18next-node-fs-backend");
+const middleware = require("i18next-http-middleware");
+const cors = require("cors");
+
+i18next
+  .use(Backend)
+  .use(middleware.LanguageDetector)
+  .init({
+    fallbackLng: "en",
+    preload: ["en", "fi"],
+    ns: ["translation"],
+    defaultNS: "translation",
+    backend: {
+      loadPath: "locales/{{lng}}/{{ns}}.json",
+    },
+  });
+
+app.use(middleware.handle(i18next));
 app.use(cors());
 app.use(express.json());
 
@@ -12,7 +31,7 @@ const rewardRoute = require("./routes/rewards");
 const userRoute = require("./routes/users");
 const paymentsRoute = require("./routes/payments");
 const productsRoute = require("./routes/products");
-const authRoute = require("./routes/authentication")
+const authRoute = require("./routes/authentication");
 const miscRoute = require("./routes/misc");
 
 app.use("/api/tasks", taskRoute);
@@ -23,7 +42,7 @@ app.use("/api/products", productsRoute);
 app.use("/api/authenticate", authRoute);
 app.use("/api", miscRoute);
 
-app.get("/", (req, res) => {
+app.get("/", (_, res) => {
   res.send("Welcome to game-management-api. This is main page");
 });
 
