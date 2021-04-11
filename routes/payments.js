@@ -27,4 +27,21 @@ router.post("/create-payment-intent", async (req, res) => {
   });
 });
 
+/**
+ * [POST] /create-checkout-session
+ * Handles product purchase by creating checkout session with Stripe.
+ */
+router.post("/create-checkout-session", async (req, res) => {
+  const { items } = req.body;
+
+  const { id } = await stripe.checkout.sessions.create({
+    payment_method_types: ["card"],
+    line_items: items,
+    mode: "payment",
+    success_url: "http://localhost:3000/tvt19kmo-app/#",
+  });
+
+  res.json({ id });
+});
+
 module.exports = router;
