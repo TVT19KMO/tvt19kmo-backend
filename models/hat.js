@@ -1,8 +1,6 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
-const Schema = mongoose.Schema
-
-const hatSchema = new Schema({
+const hatSchema = new mongoose.Schema({
 	name: {
 		type: String,
 		required: true,
@@ -14,7 +12,7 @@ const hatSchema = new Schema({
 	price: {
 		type: Number,
 		required: true }
-})
+});
 
-const Hat = mongoose.model('Hat', hatSchema)
-module.exports = Hat
+const Hat = mongoose.model('Hat', hatSchema);
+module.exports = Hat;
