@@ -10,5 +10,42 @@
     "kitchen": "keittiö",
     "dining_room": "ruokasali",
     "bedroom": "makuuhuone"
+  },
+  "User_Interface": {
+    "Play" : "Pelaa",
+    "Back" : "Takaisin",
+    "Options" : "Asetukset",
+    "Exit" : "Poistu",
+    "Reset" : "Palauta",
+    "Edit" : "Muokkaa",
+    "Delete" : "Poista",
+    "Character Customization" : "Hahmon muokkaaminen",
+    "Points" : "Pisteet",
+    "Tasks" : "Tehtävät",
+    "Store" : "Kauppa",
+    "Username" : "Käyttäjänimi",
+    "Password" : "Salasana",
+    "Email" : "Sähköposti"
+  },
+  "Character": {
+    "Hat" : "Hattu",
+    "Skin" : "Iho",
+    "Top" : "Yläosa",
+    "Bottom": "Alaosa",
+    "Shoes" : "Kengät"
+  },
+  "Colors" : {
+    "Red" : "Punainen",
+    "Green" : "Vihreä",
+    "Yellow" : "Keltainen",
+    "Black" : "Musta",
+    "Blue" : "Sininen",
+    "White" : "Valkoinen",
+    "Purple" : "Violetti",
+    "Pink" : "Vaaleanpunainen",
+    "Cyan" : "Cyan"
+  },
+  "General" : {
+    
   }
 }

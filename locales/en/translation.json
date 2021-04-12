@@ -10,5 +10,44 @@
     "kitchen": "kitchen",
     "dining_room": "dining room",
     "bedroom": "bedroom"
+  },
+  "User_Interface": {
+    "Play" : "Play",
+    "Back" : "Back",
+    "Options" : "Options",
+    "Exit" : "Exit",
+    "Reset" : "Reset",
+    "Edit" : "Edit",
+    "Delete" : "Delete",
+    "Character Customization" : "Character Customization",
+    "Points" : "Points",
+    "Tasks" : "Tasks",
+    "Store" : "Store",
+    "Username" : "Username",
+    "Password" : "Password",
+    "Email" : "Email"
+  },
+  "Character": {
+    "Hats" : "Hats",
+    "Skin" : "Skin",
+    "Hat" : "Hat",
+    "Top" : "Top",
+    "Bottom": "Bottom",
+    "Shoes" : "Shoes"
+  },
+  "Colors" : {
+    "Red" : "Red",
+    "Green" : "Green",
+    "Yellow" : "Yellow",
+    "Black" : "Black",
+    "Blue" : "Blue",
+    "White" : "White",
+    "Magenta" : "Magenta",
+    "Cyan" : "Cyan"
+  },
+  "General" : {
+    
   }
+
+
 }
