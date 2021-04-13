@@ -19,13 +19,11 @@ const taskSchema = new mongoose.Schema(
     room: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "TaskRoom",
-      cast: false,
     },
 
     difficulty: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "TaskDifficulty",
-      cast: false,
     },
 
     created: {
