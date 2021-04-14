@@ -61,6 +61,10 @@ const userSchema = new Schema(
         tasksDone: {
             type: String,
             cast: false,
+        },
+        balance: {
+            type: String,
+            cast: false,
         }
     }
 );

@@ -124,7 +124,8 @@ router.post('/', cAuth.checkAuth, (req, res) => {
                 createDate: req.body.createDate,
                 role: req.body.role,
                 playTime: req.body.playTime,
-                tasksDone: req.body.tasksDone
+                tasksDone: req.body.tasksDone,
+                balance: req.body.balance
             })
             
             user.save()
@@ -152,7 +153,8 @@ router.put('/:id', cAuth.checkAuth, (req, res) => {
             createDate = req.body.createDate,
             role = req.body.role,
             playTime = req.body.playTime,
-            tasksDone = req.body.tasksDone
+            tasksDone = req.body.tasksDone,
+            balance = req.body.balance
                 
             user.save()
             .then(() => res.status(200).json({message: "OK"}))
