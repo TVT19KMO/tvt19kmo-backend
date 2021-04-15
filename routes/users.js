@@ -137,28 +137,65 @@ router.post("/", cAuth.checkAuth, (req, res) => {
 });
 
 /*
- *** update user
- */
+*** create new user
+*/
 
-router.put("/:id", cAuth.checkAuth, (req, res) => {
-  User.findByIdAndUpdate({ _id: req.params.id }, req.body)
-    .then((user) => {
-      (firstName = req.body.firstName),
-        (lastName = req.body.lastName),
-        (email = req.body.dueDemailate),
-        (dateOfBirth = req.body.dateOfBirth),
-        (emailVerified = req.body.emailVerified),
-        (createDate = req.body.createDate),
-        (role = req.body.role),
-        (playTime = req.body.playTime),
-        (tasksDone = req.body.tasksDone);
+router.post('/', cAuth.checkAuth, (req, res) => {
+    User.findOne({ email: req.body.email }, (error, email) => {
+        if(email) {
+            return res.status(409).json({message: "Email Already Taken"})
+        }
+        
+        else {
+            const user = new User({     
+                firstName: req.body.firstName,
+                lastName: req.body.lastName,
+                email: req.body.email,
+                dateOfBirth: req.body.dateOfBirth,
+                emailVerified: req.body.emailVerified,
+                createDate: req.body.createDate,
+                role: req.body.role,
+                playTime: req.body.playTime,
+                tasksDone: req.body.tasksDone,
+                balance: req.body.balance
+            })
+            
+            user.save()
+            .then(() => res.status(200).json({message: "User Created"}))
+            .catch(() => res.status(400).json({error: "Missing Required Information"}))
 
-      user
-        .save()
-        .then(() => res.status(200).json({ message: "OK" }))
-        .catch((error) => res.status(400).json({ error: error }));
+        }     
     })
     .catch(() => res.status(400).json({ error: "Not found" }));
 });
 
+
+/*
+*** update user
+*/
+
+router.put('/:id', cAuth.checkAuth, (req, res) => {
+    
+    User.findByIdAndUpdate({ _id: req.params.id }, req.body)
+        .then(user => {
+            firstName = req.body.firstName,
+            lastName = req.body.lastName,
+            email = req.body.dueDemailate,
+            dateOfBirth = req.body.dateOfBirth,
+            emailVerified = req.body.emailVerified,
+            createDate = req.body.createDate,
+            role = req.body.role,
+            playTime = req.body.playTime,
+            tasksDone = req.body.tasksDone,
+            balance = req.body.balance
+                
+            user.save()
+            .then(() => res.status(200).json({message: "OK"}))
+            .catch(error => res.status(400).json({error: error}))
+        })
+        .catch(() => res.status(400).json({error: "Not found"}))    
+})
+
+
 module.exports = router;
+

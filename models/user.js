@@ -13,7 +13,7 @@ const isValidDate = (dateString) => {
   return dateString.match(regEx) != null;
 };
 
-//Schema of the user
+
 const userSchema = new Schema({
   firstName: {
     type: String,
@@ -61,6 +61,7 @@ const userSchema = new Schema({
     cast: false,
   },
 });
+
 /*
 userSchema.virtual('token').get(function () {
     const userForToken = {
