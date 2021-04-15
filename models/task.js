@@ -14,18 +14,19 @@ const taskSchema = new mongoose.Schema(
     note: {
       type: String,
       cast: false,
+      requried: false,
     },
 
     room: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "TaskRoom",
-      cast: false,
+      required: true,
     },
 
     difficulty: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "TaskDifficulty",
-      cast: false,
+      required: true,
     },
 
     created: {
