@@ -1,14 +1,15 @@
 require("../database/connection");
-const { seeder: taskRoomSeeder } = require("./taskRoom");
-const { seeder: taskDifficultySeeder } = require("./taskDifficulty");
-const { seeder: taskSeeder } = require("./task");
+
+const seeders = [
+  require("./parent").seeder,
+  require("./taskRoom").seeder,
+  require("./taskDifficulty").seeder,
+  require("./task").seeder,
+];
 
 (async () => {
   console.log("Seeding database...");
-  await taskRoomSeeder();
-  await taskDifficultySeeder();
-  await taskSeeder();
-
+  await Promise.all(seeders.map(async (seeder) => await seeder()));
   console.log("Seeding finished!");
   process.exit(0);
 })();

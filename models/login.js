@@ -1,12 +1,12 @@
 //import jwt from 'jsonwebtoken';
 
-const jwt = require('jsonwebtoken')
+const jwt = require("jsonwebtoken");
 //import mongoose from 'mongoose';
 
-const mongoose = require('mongoose')
-const Schema = mongoose.Schema
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 //import validator from 'validator';
-const validator = require('validator')
+const validator = require("validator");
 
 /*
 const isValidDate = dateString => {
@@ -17,20 +17,18 @@ const isValidDate = dateString => {
 */
 
 //Schema of the user
-const loginSchema = new Schema(
-    {
-        username: {
-            type: String,
-            required: true,
-            cast: false,
-        },
-        password: {
-            type: String,
-            required: true,
-            cast: false,
-        }
-    }
-);
+const loginSchema = new Schema({
+  username: {
+    type: String,
+    required: true,
+    cast: false,
+  },
+  password: {
+    type: String,
+    required: true,
+    cast: false,
+  },
+});
 
 /*
 userSchema.virtual('token').get(function () {
@@ -44,10 +42,10 @@ userSchema.virtual('token').get(function () {
 
 */
 
-const Login = mongoose.model('Login', loginSchema)
+const Login = mongoose.model("Login", loginSchema);
 //export const User = mongoose.model('User', userSchema);
 
-module.exports = Login
+module.exports = Login;
 
 /*
 export default {
