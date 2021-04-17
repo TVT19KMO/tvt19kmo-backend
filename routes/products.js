@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const { stripe } = require("../app/utils");
+const { stripe } = require("../app/utils").stripe;
 
 const router = Router();
 
