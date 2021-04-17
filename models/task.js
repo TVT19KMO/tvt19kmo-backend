@@ -5,6 +5,7 @@ const { cleanup } = require("./utils");
 
 const taskSchema = new mongoose.Schema(
   {
+
     name: {
       type: String,
       required: true,
@@ -17,16 +18,16 @@ const taskSchema = new mongoose.Schema(
       requried: false,
     },
 
+    
     room: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "TaskRoom",
+      type: String,
       required: true,
     },
 
     difficulty: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "TaskDifficulty",
+      type: Number,
       required: true,
+      cast: false,
     },
 
     created: {
@@ -44,6 +45,11 @@ const taskSchema = new mongoose.Schema(
       ref: "User",
       cast: false,
     },
+
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Parent",
+      },
   },
   {
     toObject: {

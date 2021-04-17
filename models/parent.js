@@ -26,6 +26,13 @@ const parentSchema = mongoose.Schema(
       required: true,
       cast: false,
     },
+
+    tasks: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Task'
+      }
+    ],
   },
   {
     strict: "throw",
@@ -44,6 +51,7 @@ const parentSchema = mongoose.Schema(
     },
   }
 );
+
 
 parentSchema.virtual("token").get(() => {
   const userForToken = {

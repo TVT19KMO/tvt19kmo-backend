@@ -13,6 +13,7 @@ router.use(bodyParser.json());
 
 router.get("/", (req, res) => {
   Parent.find()
+    .populate("tasks")
     .then((users) => res.status(200).json(users))
     .catch((error) => res.status(400).json({ error: error }));
 });
@@ -26,7 +27,7 @@ router.post("/register", async (req, res) => {
     if (user) {
       return res.status(409).json({ message: "User already exists" });
     } else {
-      const hash_password = bcrypt.hashSync(req.body.password, 10);
+      const hash_password = bcrypt.hashSync(req.body.passwordHash, 10);
       const user = new Parent({
         username: req.body.username,
         email: req.body.email,
@@ -81,7 +82,7 @@ router.post("/login", async ({ body: { username, password } }, res) => {
  *** delete user
  */
 
-router.delete("/:id", cAuth.checkAuth, (req, res) => {
+router.delete("/:id", (req, res) => {
   User.findByIdAndDelete(req.params.id, (error, result) => {
     if (result) {
       return res.status(200).json({ message: "OK" });
@@ -95,7 +96,7 @@ router.delete("/:id", cAuth.checkAuth, (req, res) => {
  *** find user by id
  */
 
-router.get("/:id", cAuth.checkAuth, (req, res) => {
+router.get("/:id", (req, res) => {
   User.findById(req.params.id, (error, result) => {
     if (result) {
       return res.status(200).json(result);
@@ -108,8 +109,8 @@ router.get("/:id", cAuth.checkAuth, (req, res) => {
 /*
  *** create new user
  */
-
-router.post("/", cAuth.checkAuth, (req, res) => {
+/*
+router.post("/", (req, res) => {
   User.findOne({ email: req.body.email }, (error, email) => {
     if (email) {
       return res.status(409).json({ message: "Email Already Taken" });
@@ -135,12 +136,12 @@ router.post("/", cAuth.checkAuth, (req, res) => {
     }
   }).catch((error) => res.status(500).json({ error: error }));
 });
-
+*/
 /*
 *** create new user
 */
 
-router.post('/', cAuth.checkAuth, (req, res) => {
+router.post('/', /*cAuth.checkAuth,*/ (req, res) => {
     User.findOne({ email: req.body.email }, (error, email) => {
         if(email) {
             return res.status(409).json({message: "Email Already Taken"})

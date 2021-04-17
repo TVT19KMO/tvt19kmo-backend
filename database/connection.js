@@ -4,8 +4,8 @@ const mongoose = require("mongoose");
 //dotenv.config()
 
 const dbConnection =
-  "mongodb+srv://project_admin:admin1234@project.4eapx.mongodb.net/project?retryWrites=true&w=majority";
-
+  //"mongodb+srv://project_admin:admin1234@project.4eapx.mongodb.net/project?retryWrites=true&w=majority";
+  "mongodb+srv://test-user:admin1234@testi.vsxyw.mongodb.net/testi?retryWrites=true&w=majority"   //    TESTAUSTA VARTEN
 mongoose
   .connect(dbConnection, {
     useNewUrlParser: true,
