@@ -39,10 +39,10 @@ const taskSchema = new mongoose.Schema(
       cast: false,
     },
 
-    assignedTo: {
+    creator: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      cast: false,
+      default: null,
     },
   },
   {
