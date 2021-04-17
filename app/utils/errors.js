@@ -7,7 +7,6 @@ const _ = require("lodash");
  * functions to create errors. Also some
  * error-specific type declarations.
  *
- *
  * @module utils/errors
  */
 

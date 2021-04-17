@@ -31,7 +31,7 @@ const seeder = async () => {
       rooms.find((room) => room.name == task.room) ??
       faker.random.arrayElement(rooms);
     task.difficulty = faker.random.arrayElement(difficulties);
-    task.assignedTo = null;
+    task.creator = null;
     return task;
   });
 
