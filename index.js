@@ -1,49 +1,43 @@
+// @ts-check
+
 const express = require("express");
+require("express-async-errors");
+const { mw, stripe } = require("./app/utils");
+const cors = require("cors");
+const i18n = require("./locales/i18n");
+
+const {
+  tasks,
+  rewards,
+  payments,
+  users,
+  children,
+  products,
+  misc,
+} = require("./routes");
+
 const app = express();
-const port = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5000;
 
 require("./database/connection");
 
-const i18next = require("i18next");
-const Backend = require("i18next-node-fs-backend");
-const middleware = require("i18next-http-middleware");
-const cors = require("cors");
-
-i18next
-  .use(Backend)
-  .use(middleware.LanguageDetector)
-  .init({
-    fallbackLng: "en",
-    preload: ["en", "fi"],
-    ns: ["translation"],
-    defaultNS: "translation",
-    backend: {
-      loadPath: "locales/{{lng}}/{{ns}}.json",
-    },
-  });
-
-app.use(middleware.handle(i18next));
+app.use(i18n());
 app.use(cors());
-app.use(express.json());
-
-const taskRoute = require("./routes/tasks");
-const rewardRoute = require("./routes/rewards");
-const userRoute = require("./routes/users");
-const paymentsRoute = require("./routes/payments");
-const productsRoute = require("./routes/products");
-const authRoute = require("./routes/authentication");
-const miscRoute = require("./routes/misc");
-
-app.use("/api/tasks", taskRoute);
-app.use("/api/rewards", rewardRoute);
-app.use("/api/users", userRoute);
-app.use("/api/payments", paymentsRoute);
-app.use("/api/products", productsRoute);
-app.use("/api/authenticate", authRoute);
-app.use("/api", miscRoute);
+app.use(stripe.webhook);
 
 app.get("/", (_, res) => {
-  res.send("Welcome to game-management-api. This is main page");
+  res.send("Welcome to game-management-api!");
 });
 
-app.listen(port, () => console.log(`Server running in port ${port}`));
+app.use("/api/tasks", tasks);
+app.use("/api/rewards", rewards);
+app.use("/api/users", users);
+app.use("/api/payments", payments);
+app.use("/api/products", products);
+app.use("/api/children", children);
+app.use("/api", misc);
+
+app.use(mw.unknownHandler);
+app.use(mw.errorHandler);
+
+app.listen(PORT, () => console.log(`Server running in port ${PORT}`));
