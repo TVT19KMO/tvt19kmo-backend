@@ -1,5 +1,7 @@
 // @ts-check
 
+const { config } = require("dotenv");
+config();
 const express = require("express");
 require("express-async-errors");
 const { mw, stripe } = require("./app/utils");
@@ -14,6 +16,7 @@ const {
   children,
   products,
   misc,
+  assignedTasks,
 } = require("./routes");
 
 const app = express();
@@ -35,6 +38,7 @@ app.use("/api/users", users);
 app.use("/api/payments", payments);
 app.use("/api/products", products);
 app.use("/api/children", children);
+app.use("/api/assigned-tasks", assignedTasks);
 app.use("/api", misc);
 
 app.use(mw.unknownHandler);

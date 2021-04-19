@@ -74,6 +74,7 @@ const errorHandler = (error, _, res, next) => {
     // User is not authenticated.
     case unauthorized.strCode:
       res.status(unauthorized.code).json({ message: unauthorized.message });
+      break;
 
     // Triggers when MongoDB tries to use invalid ID or cannot convert.
     case "CastError":
@@ -96,7 +97,8 @@ const errorHandler = (error, _, res, next) => {
     // Unknown erros.
     default:
       //logger.i(error.name);
-      res.status(server.code).json({ message: server.message });
+      // server.message
+      res.status(server.code).json({ message: error.message });
   }
 
   next();
