@@ -1,3 +1,4 @@
+const Parent = require("../models/parent");
 const Child = require("../models/child");
 
 const data = [
@@ -17,7 +18,15 @@ const data = [
 
 const seeder = async () => {
   await Child.deleteMany({});
-  await Child.insertMany(data);
+
+  const parent = await Parent.findOne({ username: "testaaja1" });
+
+  await Child.insertMany(
+    data.map((child) => {
+      child.parent = parent;
+      return child;
+    })
+  );
 };
 
 module.exports = {

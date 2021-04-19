@@ -7,8 +7,9 @@
 
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const { Model } = require("mongoose");
 
-const { badRequestError } = require("./errors");
+const { badRequestError, forbiddenError } = require("./errors");
 
 /**
  * Returns a JSON webtoken from the given request.
@@ -75,8 +76,27 @@ const hash = async (req, _, next) => {
   next();
 };
 
+/**
+ * Returns a middleware for checking if authenticated user is authorized
+ * to access and modify te resource with the given id.
+ * @param {Model} doc Document to access.
+ * @param {String} field Field of the resource to check.
+ */
+const authorize = (doc, field) => async (req, _, next) => {
+  // Get the resource.
+  const resource = await doc.findById(req.params.id);
+
+  // Check if user is allowed to access it.
+  if (resource[field] != req.userId) next(forbiddenError());
+
+  req.resource = resource;
+
+  next();
+};
+
 module.exports = {
   authenticate: checkToken,
+  authorize,
   getToken,
   checkToken,
   hash,

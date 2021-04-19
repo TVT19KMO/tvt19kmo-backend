@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const Parent = require("../models/parent");
-const { mw } = require("../app/utils");
+const { mw, errors } = require("../app/utils");
 const bcrypt = require("bcrypt");
 
 /**
@@ -10,6 +10,15 @@ const bcrypt = require("bcrypt");
 router.get("/", async (_, res) => {
   const parents = await Parent.find({});
   res.json({ users: parents });
+});
+
+/**
+ * [GET] /info
+ * Fetches user info.
+ */
+router.get("/info", [mw.authenticate], async ({ userId }, res) => {
+  const user = await Parent.findById(userId);
+  res.json({ user });
 });
 
 /**
@@ -34,7 +43,7 @@ router.post(
     const savedUser = await user.save();
 
     // Return the newly created user and token.
-    res.json({ user: savedUser, token: savedUser.token });
+    res.json({ token: savedUser.token });
   }
 );
 
@@ -43,6 +52,10 @@ router.post(
  * Logins an user.
  */
 router.post("/login", async ({ body: { username, password } }, res) => {
+  // Validate username and password type.
+  if (typeof username !== "string" || typeof password !== "string")
+    next(errors.badRequestError());
+
   // Fetch user by the given username.
   const user = await Parent.findOne({ username });
 
@@ -54,24 +67,7 @@ router.post("/login", async ({ body: { username, password } }, res) => {
   if (!(user && passwordCorrect)) return res.status(403).json();
 
   // Return access token and user data.
-  res.status(200).send({ token: user.token, user: user });
+  res.status(200).send({ token: user.token });
 });
-
-/**
- * async ({ body: { username, password } }, res, next) => {
-    // Validate username and password type.
-    if (typeof username !== 'string' || typeof password !== 'string')
-      next(errors.badRequestError());
-    // Fetch user by the given username.
-    const user = await User.findOne({ username });
-    // Check if the user provided correct password.
-    const passwordCorrect =
-      user === null ? false : await bcrypt.compare(password, user.passwordHash);
-    // Make sure the user exists and password is correct.
-    if (!(user && passwordCorrect)) next(errors.unauthorizedError());
-    // Return access token and user data.
-    res.status(200).send({ token: user.token, user: user });
-  }
- */
 
 module.exports = router;

@@ -1,67 +1,41 @@
-const express = require("express");
-const { getTasks } = require("../queries/tasks");
+// @ts-check
 
+const router = require("express").Router();
 const Task = require("../models/task");
 const { mw } = require("../app/utils");
+const {
+  getTasks,
+  createTask,
+  updateTask,
+  deleteTask,
+} = require("../queries/tasks");
 
-const router = express.Router();
+// Router middleware.
+router.use(mw.authenticate);
+router.use("/:id", [mw.authorize(Task, "creator")]);
 
+/**
+ * [GET] /
+ * Fetches all tasks.
+ */
 router.get("/", getTasks);
 
 /**
- * [POST] /tasks
+ * [POST] /
  * Creates a new task.
  */
-router.post("/", [mw.authenticate], async (req, res) => {
-  const task = new Task({
-    name: req.body.name,
-    note: req.body.note,
-    room: req.body.room,
-    difficulty: req.body.difficulty,
-    creator: req.userId,
-  });
-
-  try {
-    await task.save();
-    await task.populate("difficulty").populate("room").execPopulate();
-    res.status(201).json(task);
-  } catch (error) {
-    res.status(400).json({ message: error });
-  }
-});
+router.post("/", createTask);
 
 /**
- * [PUT] /tasks/:taskId
+ * [PUT] /:id
  * Update a task with the given id.
  */
-router.put("/:id", [mw.authenticate], async (req, res) => {
-  const { name, note, difficulty, room } = req.body;
+router.put("/:id", updateTask);
 
-  try {
-    const task = await Task.findByIdAndUpdate(
-      req.params.id,
-      { name, note, difficulty, room },
-      { new: true }
-    );
-    await task.populate("difficulty").populate("room").execPopulate();
-    res.json(task);
-  } catch (error) {
-    res.status(400).json({ message: error });
-  }
-});
-
-/*
- *** delete task by id
+/**
+ * [DELETE] /:id
+ * Deletes a task with the given id.
  */
-
-router.delete("/:id", [mw.authenticate], (req, res) => {
-  Task.findByIdAndDelete(req.params.id, (error, result) => {
-    if (result) {
-      return res.status(200).json({ message: "Task deleted" });
-    } else {
-      return res.status(400).json({ message: "Not found" });
-    }
-  });
-});
+router.delete("/:id", deleteTask);
 
 module.exports = router;

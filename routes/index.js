@@ -6,4 +6,5 @@ module.exports = {
   products: require("./products"),
   rewards: require("./rewards"),
   children: require("./children"),
+  assignedTasks: require("./assignedTasks"),
 };
