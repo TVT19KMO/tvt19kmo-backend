@@ -1,8 +1,16 @@
+const { AssignedTask } = require("../models");
+
 /**
  * Handles get assigned tasks request.
  */
 const getTasks = async ({ userId }, res) => {
-  const tasks = await AssignedTask.find({ assigner: userId });
+  const tasks = await AssignedTask.find({ assigner: userId })
+    .populate("assignee")
+    .populate("task")
+    .populate({
+      path: "task",
+      populate: { path: "difficulty", model: "TaskDifficulty" },
+    });
   res.json(tasks);
 };
 

@@ -3,9 +3,9 @@ const { mw } = require("../app/utils");
 const {
   getTasks,
   assignTask,
-  comleteTask,
+  completeTask,
 } = require("../queries/assignedTasks");
-const { AssignedTask, Child } = require("../models");
+const { AssignedTask } = require("../models");
 
 // Apply router middleware.
 router.use(mw.authenticate);

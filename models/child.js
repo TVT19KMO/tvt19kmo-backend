@@ -21,7 +21,7 @@ const childSchema = mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Parent",
       required: false,
-    }
+    },
   },
   {
     strict: "throw",
@@ -35,10 +35,10 @@ const childSchema = mongoose.Schema(
     toJSON: {
       transform: (_, ret) => {
         cleanup(ret);
+        delete ret.parent;
       },
     },
   }
 );
-
 
 module.exports = mongoose.model("Child", childSchema);
