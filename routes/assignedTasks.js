@@ -1,7 +1,11 @@
 const router = require("express").Router();
 const { mw } = require("../app/utils");
-const { getTasks, assignTask } = require("../queries/assignedTasks");
-const { AssignedTask } = require("../models");
+const {
+  getTasks,
+  assignTask,
+  comleteTask,
+} = require("../queries/assignedTasks");
+const { AssignedTask, Child } = require("../models");
 
 // Apply router middleware.
 router.use(mw.authenticate);
@@ -46,12 +50,6 @@ router.post("/", assignTask);
  *
  * @errors 401, 403, 500
  */
-router.post("/:id/complete", async ({ params }, res) => {
-  const { id } = params;
-  const task = await AssignedTask.findByIdAndUpdate(id, {
-    finished: Date.now(),
-  });
-  res.status(203).json(task);
-});
+router.post("/:id/complete", completeTask);
 
 module.exports = router;
