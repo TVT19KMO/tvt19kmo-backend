@@ -1,4 +1,14 @@
-const { AssignedTask } = require("../models");
+const { badRequestError } = require("../app/utils/errors");
+const {
+  AssignedTask,
+  Task,
+  Parent,
+  Child,
+  TaskDifficulty,
+} = require("../models");
+
+const populate = (task) =>
+  task.populate("assignee").populate("task").execPopulate();
 
 /**
  * Handles get assigned tasks request.
@@ -6,24 +16,28 @@ const { AssignedTask } = require("../models");
 const getTasks = async ({ userId }, res) => {
   const tasks = await AssignedTask.find({ assigner: userId })
     .populate("assignee")
-    .populate("task")
-    .populate({
-      path: "task",
-      populate: { path: "difficulty", model: "TaskDifficulty" },
-    });
+    .populate("task");
+
   res.json(tasks);
 };
 
 /**
  * Handles assign task(s) request.
  */
-const assignTask = async ({ body, userId }, res) => {
+const assignTask = async ({ body, userId }, res, next) => {
   const { children, task } = body;
 
-  // TODO: Make sure parent has enough money to create tasks.
-  // TODO: Remove money from parent's balance.
+  const parent = await Parent.findById(userId);
+  const taskToAssign = await Task.findById(task).populate("difficulty");
 
-  const tasks = Promise.all(
+  // Calculate total required to assign task.
+  const coinsRequired = taskToAssign.difficulty.reward * children.length;
+
+  // Make sure parent has enough money to assign tasks.
+  if (parent.balance < coinsRequired)
+    return next(badRequestError("Insufficient balance!"));
+
+  const tasks = await Promise.all(
     children.map(async (child) => {
       // Assign a task for each child.
       const assignedTask = new AssignedTask({
@@ -31,12 +45,16 @@ const assignTask = async ({ body, userId }, res) => {
         assigner: userId,
         task,
       });
-      return await assignedTask.save();
+      const savedTask = await assignedTask.save();
+      return await populate(savedTask);
     })
   );
 
-  // Return the assigned tasks.
-  res.status(201).json(tasks);
+  // Remove coins from parent' balance.
+  parent.balance -= coinsRequired;
+  parent.save();
+
+  res.status(201).json({ tasks, balance: parent.balance });
 };
 
 /**
@@ -46,18 +64,31 @@ const completeTask = async ({ resource: task }, res) => {
   // Mark the task as finished.
   task.finished = Date.now();
   await task.save();
+  await populate(task);
+
+  // Get the difficulty.
+  const difficulty = await TaskDifficulty.findById(task.task.difficulty);
 
   // Add money to child's account.
-  const child = await Child.findById(task.assignee);
-  child.balance += 50;
+  const child = await Child.findById(task.assignee.id);
+  child.balance += difficulty.reward;
   await child.save();
 
   // Return the finished task.
-  res.status(203).json(task);
+  res.status(200).json(task);
+};
+
+/**
+ * Handles deletion of assigned task.
+ */
+const deleteTask = async ({ resource: task }, res) => {
+  await task.delete();
+  res.status(203).end();
 };
 
 module.exports = {
   getTasks,
+  deleteTask,
   assignTask,
   completeTask,
 };
