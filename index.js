@@ -7,6 +7,7 @@ require("express-async-errors");
 const { mw, stripe } = require("./app/utils");
 const cors = require("cors");
 const i18n = require("./locales/i18n");
+const morgan = require("morgan");
 
 const {
   tasks,
@@ -26,6 +27,7 @@ require("./database/connection");
 
 app.use(i18n());
 app.use(cors());
+app.use(morgan("combined"));
 app.use(stripe.webhook);
 
 app.get("/", (_, res) => {

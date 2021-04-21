@@ -12,7 +12,6 @@ const assignedTaskSchema = new mongoose.Schema(
 
     assigned: {
       type: Date,
-      cast: false,
       default: Date.now,
     },
 
@@ -36,13 +35,14 @@ const assignedTaskSchema = new mongoose.Schema(
   },
   {
     toObject: {
-      transform: (_, ret) => {
+      transform: (doc, ret) => {
         cleanup(ret);
       },
     },
     toJSON: {
       transform: (_, ret) => {
         cleanup(ret);
+        delete ret.assigner;
       },
     },
   }

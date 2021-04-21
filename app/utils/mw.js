@@ -22,6 +22,7 @@ const {
  * @param {Object} error;
  */
 const errorHandler = (error, _, res, next) => {
+  console.log(error);
   // Just to know what happened...
   //logger.i(error.name);
   //logger.i(error.message);

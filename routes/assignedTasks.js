@@ -1,7 +1,12 @@
 const router = require("express").Router();
 const { mw } = require("../app/utils");
-const { getTasks, assignTask } = require("../queries/assignedTasks");
 const { AssignedTask } = require("../models");
+const {
+  getTasks,
+  assignTask,
+  completeTask,
+  deleteTask,
+} = require("../queries/assignedTasks");
 
 // Apply router middleware.
 router.use(mw.authenticate);
@@ -13,8 +18,9 @@ router.use("/:id", [mw.authorize(AssignedTask, "assigner")]);
  *
  * @request
  *
- * @respones
+ * @response
  * @field {[AssignedTask]} tasks - An array of every assigned task where the parent is the assigner.
+ * @status 200
  *
  * @errors 400, 401, 500
  */
@@ -42,16 +48,24 @@ router.post("/", assignTask);
  *
  * @response
  * @field {AssignedTask} task - The completed task.
+ * @status 200
+ *
+ * @errors 401, 403, 404, 500
+ */
+router.post("/:id/complete", completeTask);
+
+/**
+ * [DELETE] /:id
+ * Deletes an assigned task.
+ *
+ * @request
+ * @param {ObjectId} id Id of the task to delete.
+ *
+ * @response
  * @status 203
  *
- * @errors 401, 403, 500
+ * @errors 404
  */
-router.post("/:id/complete", async ({ params }, res) => {
-  const { id } = params;
-  const task = await AssignedTask.findByIdAndUpdate(id, {
-    finished: Date.now(),
-  });
-  res.status(203).json(task);
-});
+router.delete("/:id", deleteTask);
 
 module.exports = router;

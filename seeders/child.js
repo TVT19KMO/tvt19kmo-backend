@@ -23,7 +23,7 @@ const seeder = async () => {
 
   await Child.insertMany(
     data.map((child) => {
-      child.parent = parent;
+      child.parent = parent.id;
       return child;
     })
   );
