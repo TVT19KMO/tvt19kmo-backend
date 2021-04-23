@@ -33,12 +33,6 @@ const parentSchema = mongoose.Schema(
       default: 5000,
       cast: false,
     },
-
-    link: {
-      type: Number,
-      required: true,
-      default: Math.floor(10000000 + Math.random() * 90000000),
-    },
   },
   {
     strict: "throw",

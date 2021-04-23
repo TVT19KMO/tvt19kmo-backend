@@ -24,6 +24,7 @@ const seeder = async () => {
   await Child.insertMany(
     data.map((child) => {
       child.parent = parent.id;
+      child.code = Math.floor(10000000 + Math.random() * 90000000);
       return child;
     })
   );

@@ -1,13 +1,25 @@
 // @ts-check
 
+/**
+ * This module handles child related API calls.
+ * Preferred route: /api/children
+ *
+ * @routes
+ * GET / - Returns children of the parent.
+ * POST /link - Links child with a parent and allows child to access API.
+ * POST /:id/remove-device - Removes child's linked device.
+ * POST /:id/generate-code - Generates new linking code for a child.
+ *
+ * @module routes/children
+ */
+
 const router = require("express").Router();
+const req = require("../controllers/children");
 const { mw } = require("../app/utils");
-const { getChildren } = require("../controllers/children");
 const Child = require("../models/child");
 
 // Router middleware.
-router.use(mw.authenticate);
-router.use("/:id", [mw.authorize(Child, "parent")]);
+router.use("/:id", [mw.authenticate, mw.authorize(Child, "parent")]);
 
 /**
  * [GET] /
@@ -15,11 +27,75 @@ router.use("/:id", [mw.authorize(Child, "parent")]);
  *
  * @request
  *
- * @response {[Child]} children - An array of every children of the user.
+ * @response {[Child]} An array of children of the parent user.
  * @status 200
+ * @example
+ * [
+ *    {...},
+ *    {...},
+ *    {...}
+ * ]
  *
  * @errors 400, 401, 500
  */
-router.get("/", getChildren);
+router.get("/", mw.authenticate, req.getChildren);
+
+/**
+ * [POST] /link
+ * Links child with a parent and allows child to access API.
+ *
+ * @request
+ * @field {Number} code - getChildByCodede used to link the child.
+ * @field {String} device - Unique identifier of the child's device.
+ * @example
+ * {
+ *    'code': 12345678,
+ *    'device': '20371082470172410204710274172094'
+ * }
+ *
+ * @response
+ * @field {String} token - Access token used to consume API.
+ * @status 200
+ * @example
+ * {
+ *    'token': '90ajs0d99ja00fja0fj09a0s9fj09asjf09j09asfj09
+ * }
+ *
+ * @errors 400, 500
+ */
+router.post("/link", req.linkChild);
+
+/**
+ * [POST] /:id/remove-device
+ * Removes child's linked device.
+ *
+ * @request
+ * @param {String} id - Identifier of the child.
+ *
+ * @response
+ * @status 203
+ *
+ * @errors 400, 401, 403, 404, 500
+ */
+router.post("/:id/remove-device", req.removeChildDevice);
+
+/**
+ * [POST] /:id/generate-code
+ * Generates new linking code for a child.
+ *
+ * @request
+ * @param {String} id Identifier of the child.
+ *
+ * @response
+ * @field {Number} code - New code generated for the child.
+ * @status 200
+ * @example
+ * {
+ *    'code': 12345678
+ * }
+ *
+ * @errors 400, 401, 403, 404, 500
+ */
+router.post("/:id/generate-code", req.generateChildCode);
 
 module.exports = router;
