@@ -1,4 +1,5 @@
 const q = require("../queries/children");
+const { badRequestError } = require("../app/utils/errors");
 
 /**
  * Handles request to fetch children of parent.
@@ -24,7 +25,7 @@ const addChild = async ({ body, userId }, res) => {
  * @type {import("express").RequestHandler}
  */
 const linkChild = async ({ body: { code, device } }, res, next) => {
-  const child = await q.getChildByCode(code);
+  const child = await q.getChildByCode(+code);
 
   // Make sure link code is not used.
   if (child.device) return next(badRequestError("This link is already in use"));
