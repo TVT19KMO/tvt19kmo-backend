@@ -39,7 +39,7 @@ const assignTask = async ({ body, userId }, res, next) => {
 
   const tasks = await Promise.all(
     children.map(async (child) => {
-      // Assign a task for each child.
+      // Assign a task to each child.
       const assignedTask = new AssignedTask({
         assignee: child,
         assigner: userId,

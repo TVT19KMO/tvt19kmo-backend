@@ -3,7 +3,7 @@ const { Child, Task, Parent, AssignedTask } = require("../models");
 const _ = require("lodash");
 
 const seeder = async () => {
-  await AssignedTask.deleteMany({});
+  await AssignedTask.collection.drop();
 
   const parent = await Parent.findOne({ username: "testaaja1" });
   const children = await Child.find({ parent: parent.id });

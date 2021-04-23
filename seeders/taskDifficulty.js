@@ -16,7 +16,7 @@ const data = [
 ];
 
 const seeder = async () => {
-  await TaskDifficulty.deleteMany({});
+  await TaskDifficulty.collection.drop();
   await TaskDifficulty.insertMany(data);
 };
 

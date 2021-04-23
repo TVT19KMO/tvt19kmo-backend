@@ -12,4 +12,5 @@ module.exports = {
   TaskDifficulty: require("./taskDifficulty"),
   TaskRoom: require("./taskRoom"),
   Top: require("./top"),
+  utils: require("./utils"),
 };

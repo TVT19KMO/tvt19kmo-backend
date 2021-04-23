@@ -1,5 +1,3 @@
-//import mongoose from 'mongoose';      KONSTA
-//const validator = require('validator')    KONSTA
 const mongoose = require("mongoose");
 const { cleanup } = require("./utils");
 
@@ -8,34 +6,43 @@ const assignedTaskSchema = new mongoose.Schema(
     finished: {
       type: Date,
       required: false,
+      default: null,
+      cast: true,
     },
 
     assigned: {
       type: Date,
       default: Date.now,
+      required: true,
+      cast: true,
     },
 
     assignee: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Child",
       required: true,
+      cast: true,
     },
 
     assigner: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Parent",
       required: true,
+      cast: true,
     },
 
     task: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Task",
       required: true,
+      cast: true,
     },
   },
   {
+    strict: "throw",
+
     toObject: {
-      transform: (doc, ret) => {
+      transform: (_, ret) => {
         cleanup(ret);
       },
     },
@@ -47,5 +54,10 @@ const assignedTaskSchema = new mongoose.Schema(
     },
   }
 );
+
+assignedTaskSchema.pre("findOneAndUpdate", function (next) {
+  this.options.runValidators = true;
+  next();
+});
 
 module.exports = mongoose.model("AssignedTask", assignedTaskSchema);

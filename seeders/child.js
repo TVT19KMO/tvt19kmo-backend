@@ -17,15 +17,16 @@ const data = [
 ];
 
 const seeder = async () => {
-  await Child.deleteMany({});
+  await Child.collection.drop()
 
   const parent = await Parent.findOne({ username: "testaaja1" });
 
   await Child.insertMany(
-    data.map((child) => {
-      child.parent = parent.id;
-      return child;
-    })
+    data.map((child) => ({
+      ...child,
+      parent: parent.id,
+      code: Math.floor(10000000 + Math.random() * 90000000),
+    }))
   );
 };
 

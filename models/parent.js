@@ -6,6 +6,7 @@ const { cleanup } = require("./utils");
 
 const parentSchema = mongoose.Schema(
   {
+    // Email of the parent.
     email: {
       type: String,
       required: true,
@@ -14,6 +15,7 @@ const parentSchema = mongoose.Schema(
       cast: false,
     },
 
+    // Username of the parent.
     username: {
       type: String,
       required: true,
@@ -21,23 +23,19 @@ const parentSchema = mongoose.Schema(
       cast: false,
     },
 
+    // Password hash of the parent.
     passwordHash: {
       type: String,
       required: true,
       cast: false,
     },
 
+    // Balance of the parent's account.
     balance: {
       type: Number,
       required: true,
       default: 5000,
       cast: false,
-    },
-
-    link: {
-      type: Number,
-      required: true,
-      default: Math.floor(10000000 + Math.random() * 90000000),
     },
   },
   {

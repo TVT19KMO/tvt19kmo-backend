@@ -19,7 +19,7 @@ const data = [
 ];
 
 const seeder = async () => {
-  await TaskRoom.deleteMany({});
+  await TaskRoom.collection.drop();
   await TaskRoom.insertMany(data);
 };
 

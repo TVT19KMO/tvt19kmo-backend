@@ -9,6 +9,8 @@ const taskRoom = new mongoose.Schema(
     },
   },
   {
+    strict: "throw",
+
     toObject: {
       transform: (_, ret) => {
         cleanup(ret);
@@ -21,5 +23,10 @@ const taskRoom = new mongoose.Schema(
     },
   }
 );
+
+taskRoom.pre("findOneAndUpdate", function (next) {
+  this.options.runValidators = true;
+  next();
+});
 
 module.exports = mongoose.model("TaskRoom", taskRoom);
