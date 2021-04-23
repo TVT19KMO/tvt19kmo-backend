@@ -20,7 +20,7 @@ const data = [
 ];
 
 const seeder = async () => {
-  await Parent.deleteMany({});
+  await Parent.collection.drop();
   await Parent.insertMany(data);
 };
 

@@ -21,12 +21,14 @@ const taskSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "TaskRoom",
       required: true,
+      cast: true,
     },
 
     difficulty: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "TaskDifficulty",
       required: true,
+      cast: true,
     },
 
     created: {
@@ -43,9 +45,12 @@ const taskSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       default: null,
+      cast: true,
     },
   },
   {
+    strict: "throw",
+
     toObject: {
       transform: (_, ret) => {
         cleanup(ret);
@@ -58,5 +63,10 @@ const taskSchema = new mongoose.Schema(
     },
   }
 );
+
+taskSchema.pre("findOneAndUpdate", function (next) {
+  this.options.runValidators = true;
+  next();
+});
 
 module.exports = mongoose.model("Task", taskSchema);

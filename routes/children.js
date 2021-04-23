@@ -5,10 +5,11 @@
  * Preferred route: /api/children
  *
  * @routes
- * GET / - Returns children of the parent.
- * POST /link - Links child with a parent and allows child to access API.
- * POST /:id/remove-device - Removes child's linked device.
- * POST /:id/generate-code - Generates new linking code for a child.
+ * GET  /                   - Returns children of the parent.
+ * POST /                   - Creates a new child.
+ * POST /link               - Links child with a parent and allows child to access API.
+ * POST /:id/remove-device  - Removes child's linked device.
+ * POST /:id/generate-code  - Generates new linking code for a child.
  *
  * @module routes/children
  */
@@ -23,7 +24,7 @@ router.use("/:id", [mw.authenticate, mw.authorize(Child, "parent")]);
 
 /**
  * [GET] /
- * Returns children of the authenticated user (parent)
+ * Returns children of the authenticated user (parent).
  *
  * @request
  *
@@ -41,11 +42,29 @@ router.use("/:id", [mw.authenticate, mw.authorize(Child, "parent")]);
 router.get("/", mw.authenticate, req.getChildren);
 
 /**
+ * [POST] /
+ * Creates a new child for the parent.
+ *
+ * @request
+ * @field {String} name   - Name of the child to create.
+ * @example
+ * {
+ *    'name': 'Erkki Esimerkki'
+ * }
+ *
+ * @response {Child} The created child resouce.
+ * @status 201
+ *
+ * @errors 400, 401, 500
+ */
+router.post("/", mw.authenticate, req.addChild);
+
+/**
  * [POST] /link
  * Links child with a parent and allows child to access API.
  *
  * @request
- * @field {Number} code - getChildByCodede used to link the child.
+ * @field {Number} code   - Code used to link the child with parent.
  * @field {String} device - Unique identifier of the child's device.
  * @example
  * {
@@ -66,6 +85,11 @@ router.get("/", mw.authenticate, req.getChildren);
 router.post("/link", req.linkChild);
 
 /**
+ * [PUT] /:id
+ * TODO: Allow parent to update child's name.
+ */
+
+/**
  * [POST] /:id/remove-device
  * Removes child's linked device.
  *
@@ -84,7 +108,7 @@ router.post("/:id/remove-device", req.removeChildDevice);
  * Generates new linking code for a child.
  *
  * @request
- * @param {String} id Identifier of the child.
+ * @param {String} id - Identifier of the child.
  *
  * @response
  * @field {Number} code - New code generated for the child.

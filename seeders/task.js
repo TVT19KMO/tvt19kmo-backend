@@ -21,7 +21,7 @@ const data = [
 ];
 
 const seeder = async () => {
-  await Task.deleteMany({});
+  await Task.collection.drop();
 
   const difficulties = await TaskDifficulty.find({});
   const rooms = await TaskRoom.find({});

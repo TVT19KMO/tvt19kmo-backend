@@ -8,6 +8,7 @@ const taskDifficulty = new mongoose.Schema(
       required: true,
       cast: false,
     },
+
     reward: {
       type: Number,
       required: true,
@@ -15,6 +16,8 @@ const taskDifficulty = new mongoose.Schema(
     },
   },
   {
+    strict: "throw",
+
     toObject: {
       transform: (_, ret) => {
         cleanup(ret);
