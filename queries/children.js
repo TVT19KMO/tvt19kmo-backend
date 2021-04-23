@@ -17,7 +17,10 @@ const getChildrenForParent = async (parentId) =>
  * @param {Object} childData Data required to create a child.
  */
 const createChild = async (childData) => {
-  const child = new Child({ ...childData });
+  const child = new Child({
+    ...childData,
+    code: Math.floor(10000000 + Math.random() * 90000000),
+  });
   return await child.save();
 };
 
