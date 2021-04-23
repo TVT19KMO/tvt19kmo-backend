@@ -43,7 +43,7 @@ app.use("/api/payments", payments);
 app.use("/api/products", products);
 app.use("/api/children", children);
 app.use("/api/assigned-tasks", assignedTasks);
-app.use("/api/store", storeRoute)
+app.use("/api/store", storeRoute);
 app.use("/api", misc);
 
 app.use(mw.unknownHandler);

@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const jwt = require("jsonwebtoken");
 const { cleanup } = require("./utils");
 const mongooseUniqueValidator = require("mongoose-unique-validator");
 

@@ -19,9 +19,6 @@ const req = require("../controllers/children");
 const { mw } = require("../app/utils");
 const Child = require("../models/child");
 
-// Router middleware.
-router.use("/:id", [mw.authenticate, mw.authorize(Child, "parent")]);
-
 /**
  * [GET] /
  * Returns children of the authenticated user (parent).
@@ -101,7 +98,11 @@ router.post("/link", req.linkChild);
  *
  * @errors 400, 401, 403, 404, 500
  */
-router.post("/:id/remove-device", req.removeChildDevice);
+router.post(
+  "/:id/remove-device",
+  [mw.authenticate, mw.authorize(Child, "parent")],
+  req.removeChildDevice
+);
 
 /**
  * [POST] /:id/generate-code
@@ -120,6 +121,10 @@ router.post("/:id/remove-device", req.removeChildDevice);
  *
  * @errors 400, 401, 403, 404, 500
  */
-router.post("/:id/generate-code", req.generateChildCode);
+router.post(
+  "/:id/generate-code",
+  [mw.authenticate, mw.authorize(Child, "parent")],
+  req.generateChildCode
+);
 
 module.exports = router;

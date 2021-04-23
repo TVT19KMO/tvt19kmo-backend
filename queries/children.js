@@ -24,7 +24,7 @@ const createChild = async (childData) => {
 /**
  * Returns child with the given linking code.
  *
- * @param {String} code The code used for linking parent -> child.
+ * @param {Number} code The code used for linking parent -> child.
  */
 const getChildByCode = async (code) => await Child.findOne({ code });
 
