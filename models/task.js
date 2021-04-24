@@ -1,22 +1,23 @@
-//import mongoose from 'mongoose';      KONSTA
-//const validator = require('validator')    KONSTA
 const mongoose = require("mongoose");
 const { cleanup } = require("./utils");
 
 const taskSchema = new mongoose.Schema(
   {
+    // The name of the task.
     name: {
       type: String,
       required: true,
       cast: false,
     },
 
+    // More specific description about the task.
     note: {
       type: String,
       cast: false,
-      requried: false,
+      required: false,
     },
 
+    // The room related to task.
     room: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "TaskRoom",
@@ -24,6 +25,7 @@ const taskSchema = new mongoose.Schema(
       cast: true,
     },
 
+    // The difficulty of task.
     difficulty: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "TaskDifficulty",
@@ -31,16 +33,20 @@ const taskSchema = new mongoose.Schema(
       cast: true,
     },
 
+    // The date task was created.
     created: {
       type: Date,
       default: Date.now,
     },
 
-    finished: {
+    // The date task wass deleted.
+    deleted: {
       type: Date,
-      cast: false,
+      cast: true,
+      default: null,
     },
 
+    // The creator of the task.
     creator: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

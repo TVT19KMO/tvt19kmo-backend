@@ -14,12 +14,13 @@ router.use("/:id", [mw.authorize(AssignedTask, "assigner")]);
 
 /**
  * [GET] /
- * Allows parent to fetch all assigned tasks.
+ * Allows parent/child to fetch all assigned tasks.
  *
  * @request
  *
  * @response
- * @field {[AssignedTask]} tasks - An array of every assigned task where the parent is the assigner.
+ * @field {[AssignedTask]} tasks - An array of every assigned task where
+ * the parent is the assigner or the child is the assignee.
  * @status 200
  *
  * @errors 400, 401, 500

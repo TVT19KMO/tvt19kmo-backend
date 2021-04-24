@@ -1,3 +1,5 @@
+const mongoose = require("mongoose");
+
 const Parent = require("../models/parent");
 const Child = require("../models/child");
 
@@ -17,7 +19,7 @@ const data = [
 ];
 
 const seeder = async () => {
-  await Child.collection.drop()
+  await Child.collection.drop();
 
   const parent = await Parent.findOne({ username: "testaaja1" });
 
@@ -28,6 +30,16 @@ const seeder = async () => {
       code: Math.floor(10000000 + Math.random() * 90000000),
     }))
   );
+
+  const childWithDevice = new Child({
+    name: "Late Laite",
+    parent: parent.id,
+    code: Math.floor(10000000 + Math.random() * 90000000),
+    device: mongoose.Types.ObjectId(),
+    balance: 1000,
+  });
+
+  await childWithDevice.save();
 };
 
 module.exports = {

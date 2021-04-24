@@ -7,7 +7,7 @@ const populate = async (task) =>
   await task.populate("difficulty").populate("room").execPopulate();
 
 const getTasks = async ({ userId }, res) => {
-  const tasks = await Task.find()
+  const tasks = await Task.find({ deleted: null })
     .where("creator")
     .in([null, userId])
     .populate("difficulty")
@@ -45,7 +45,8 @@ const updateTask = async ({ resource: task, body }, res) => {
 };
 
 const deleteTask = async ({ resource: task }, res) => {
-  await task.delete();
+  task.deleted = Date.now();
+  await task.save();
   res.status(NO_CONTENT).end();
 };
 
