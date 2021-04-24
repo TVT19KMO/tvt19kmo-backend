@@ -3,6 +3,7 @@ const { cleanup } = require("./utils");
 
 const assignedTaskSchema = new mongoose.Schema(
   {
+    // The date assigned task was finished.
     finished: {
       type: Date,
       required: false,
@@ -10,6 +11,7 @@ const assignedTaskSchema = new mongoose.Schema(
       cast: true,
     },
 
+    // The date the task was assigned.
     assigned: {
       type: Date,
       default: Date.now,
@@ -17,6 +19,15 @@ const assignedTaskSchema = new mongoose.Schema(
       cast: true,
     },
 
+    // The date the task was deleted.
+    deleted: {
+      type: Date,
+      required: false,
+      default: null,
+      cast: true,
+    },
+
+    // The child the task is assigned to.
     assignee: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Child",
@@ -24,6 +35,7 @@ const assignedTaskSchema = new mongoose.Schema(
       cast: true,
     },
 
+    // The parent who assaigned the task.
     assigner: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Parent",
@@ -31,6 +43,7 @@ const assignedTaskSchema = new mongoose.Schema(
       cast: true,
     },
 
+    // The task that was assigned.
     task: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Task",

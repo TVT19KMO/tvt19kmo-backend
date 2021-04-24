@@ -13,8 +13,12 @@ const populate = (task) =>
 /**
  * Handles get assigned tasks request.
  */
-const getTasks = async ({ userId }, res) => {
-  const tasks = await AssignedTask.find({ assigner: userId })
+const getTasks = async ({ userId, childId }, res) => {
+  const query = { deleted: null };
+  if (userId) query.assigner = userId;
+  if (childId) query.assignee = childId;
+
+  const tasks = await AssignedTask.find(query)
     .populate("assignee")
     .populate("task");
 
@@ -57,6 +61,11 @@ const assignTask = async ({ body, userId }, res, next) => {
   res.status(201).json({ tasks, balance: parent.balance });
 };
 
+const reassignTask = async ({ body, task }, res) => {
+  task.finished = null;
+  await task.save();
+};
+
 /**
  * Handles complete task request.
  */
@@ -82,7 +91,8 @@ const completeTask = async ({ resource: task }, res) => {
  * Handles deletion of assigned task.
  */
 const deleteTask = async ({ resource: task }, res) => {
-  await task.delete();
+  task.deleted = Date.now();
+  await task.save();
   res.status(203).end();
 };
 

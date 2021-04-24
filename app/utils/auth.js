@@ -46,11 +46,13 @@ const checkToken = (req, _, next) => {
   const decodedToken = jwt.verify(token, "secretkey");
 
   // Get data from token.
-  const { username, id } = decodedToken;
+  const { username, id, code } = decodedToken;
 
   // Add parsed token data to request.
   req.username = username;
-  req.userId = id;
+
+  if (code) req.childId = id;
+  else req.userId = id;
 
   // Call next middleware.
   next();
