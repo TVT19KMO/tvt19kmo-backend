@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const { badRequestError } = require("../app/utils/errors");
 const {
   AssignedTask,
@@ -61,9 +62,19 @@ const assignTask = async ({ body, userId }, res, next) => {
   res.status(201).json({ tasks, balance: parent.balance });
 };
 
-const reassignTask = async ({ body, task }, res) => {
-  task.finished = null;
-  await task.save();
+const reassignTask = async ({ resource: originalTask, userId }, res, next) => {
+  // Make sure reassigned task is finished.
+  if (!originalTask.finished) {
+    return next(badRequestError("Cannot reassign unfinished task!"));
+  }
+
+  // Mark the original task as deleted so it wont be fetched.
+  originalTask.deleted = Date.now();
+  await originalTask.save();
+
+  // Now just assign a task based on the original one...
+  const { task, assignee: child } = originalTask;
+  await assignTask({ body: { children: [child], task }, userId }, res, next);
 };
 
 /**
@@ -99,6 +110,7 @@ const deleteTask = async ({ resource: task }, res) => {
 module.exports = {
   getTasks,
   deleteTask,
+  reassignTask,
   assignTask,
   completeTask,
 };

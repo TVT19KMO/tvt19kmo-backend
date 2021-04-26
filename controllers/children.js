@@ -45,7 +45,7 @@ const linkChild = async ({ body: { code, device } }, res, next) => {
 const removeChildDevice = async ({ resource: child }, res) => {
   child.device = null;
   await child.save();
-  res.json(child);
+  res.status(203).end();
 };
 
 /**
@@ -54,8 +54,7 @@ const removeChildDevice = async ({ resource: child }, res) => {
  * @type {import("express").RequestHandler}
  */
 const generateChildCode = async ({ resource: child }, res) => {
-  const newCode = 123;
-  child.code = newCode;
+  child.code = Math.floor(10000000 + Math.random() * 90000000);
   await child.save();
   res.json({ code: child.code });
 };
