@@ -11,16 +11,15 @@ const morgan = require("morgan");
 
 const {
   tasks,
-  rewards,
   payments,
   users,
   children,
   products,
   misc,
   assignedTasks,
+  store,
 } = require("./routes");
 
-const storeRoute = require("./routes/store");
 const statisticsRoute = require("./routes/statistics")
 
 const app = express();
@@ -38,13 +37,12 @@ app.get("/", (_, res) => {
 });
 
 app.use("/api/tasks", tasks);
-app.use("/api/rewards", rewards);
 app.use("/api/users", users);
 app.use("/api/payments", payments);
 app.use("/api/products", products);
 app.use("/api/children", children);
 app.use("/api/assigned-tasks", assignedTasks);
-app.use("/api/store", storeRoute);
+app.use("/api/store", store);
 app.use("/api/statistics", statisticsRoute)
 app.use("/api", misc);
 

@@ -1,6 +1,7 @@
 require("../database/connection");
 
 const seeders = [
+  require("./item").seeder,
   require("./parent").seeder,
   require("./taskRoom").seeder,
   require("./taskDifficulty").seeder,
