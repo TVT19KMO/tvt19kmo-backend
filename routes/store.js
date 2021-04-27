@@ -27,6 +27,13 @@ router.get("/items", async (req, res) => {
 /**
  * [GET] /purchases
  * Allows child to fetch purchased store items.
+ *
+ * @request
+ *
+ * @response {[Item]} An array of items child has purchased.
+ * @status 200
+ *
+ * @errors 500
  */
 router.get("/purchases", mw.authenticate, async ({ childId }, res) => {
   const purchases = await Purchases.findOne({ child: childId });
@@ -37,6 +44,14 @@ router.get("/purchases", mw.authenticate, async ({ childId }, res) => {
 /**
  * [POST] /purchase
  * Allows child to purchase a store item.
+ *
+ * @request
+ * @field {[ObjectId]} item - The id of the item to purchase.
+ *
+ * @response {[Item]} An array of all the items child owns.
+ * @status 200
+ *
+ * @errors 400, 401, 500
  */
 router.post(
   "/purchase",
@@ -63,6 +78,7 @@ router.post(
         return next(badRequestError("Item is already owned"));
     }
 
+    // Update child's balance.
     child.balance -= itemToPurchase.price;
     await child.save();
 
@@ -70,6 +86,7 @@ router.post(
     purchases.items.push(itemId);
     await purchases.save();
 
+    // Return updated items.
     await purchases.populate("items").execPopulate();
     res.json(purchases.items);
   }
