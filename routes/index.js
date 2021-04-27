@@ -4,7 +4,7 @@ module.exports = {
   users: require("./users"),
   misc: require("./misc"),
   products: require("./products"),
-  rewards: require("./rewards"),
   children: require("./children"),
   assignedTasks: require("./assignedTasks"),
+  store: require("./store"),
 };

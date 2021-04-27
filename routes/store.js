@@ -1,33 +1,95 @@
-const express = require("express");
-const Hat = require("../models/hat");
-const Shoe = require("../models/shoe");
-const Bottom = require("../models/bottom");
-const Top = require("../models/top");
+const router = require("express").Router();
 
-const router = express.Router();
+const { badRequestError } = require("../app/utils/errors");
 
-router.get('/hats', (req, res) => {
-    Hat.find()
-    .then(hat => res.status(200).json(hat))
-    .catch(error => res.status(400).json({message: error}))
-})
+const Item = require("../models/item");
+const Child = require("../models/child");
+const Purchases = require("../models/purchases");
 
-router.get('/shoes', (req, res) => {
-    Shoe.find()
-    .then(shoe => res.status(200).json(shoe))
-    .catch(error => res.status(400).json({message: error}))
-})
+const { mw } = require("../app/utils");
 
-router.get('/bottoms', (req, res) => {
-    Bottom.find()
-    .then(bottom => res.status(200).json(bottom))
-    .catch(error => res.status(400).json({message: error}))
-})
+/**
+ * [GET] /items
+ * Allows child to fetch all available store items.
+ *
+ * @request
+ *
+ * @response {[Item]} An array of available store items.
+ * @status 200
+ *
+ * @errors 500
+ */
+router.get("/items", async (req, res) => {
+  const items = await Item.find({});
+  res.json(items);
+});
 
-router.get('/tops', (req, res) => {
-    Top.find()
-    .then(top => res.status(200).json(top))
-    .catch(error => res.status(400).json({message: error}))
-})
+/**
+ * [GET] /purchases
+ * Allows child to fetch purchased store items.
+ *
+ * @request
+ *
+ * @response {[Item]} An array of items child has purchased.
+ * @status 200
+ *
+ * @errors 500
+ */
+router.get("/purchases", mw.authenticate, async ({ childId }, res) => {
+  const purchases = await Purchases.findOne({ child: childId });
+  await purchases.populate("items").execPopulate();
+  res.json(purchases.items);
+});
+
+/**
+ * [POST] /purchase
+ * Allows child to purchase a store item.
+ *
+ * @request
+ * @field {[ObjectId]} item - The id of the item to purchase.
+ *
+ * @response {[Item]} An array of all the items child owns.
+ * @status 200
+ *
+ * @errors 400, 401, 500
+ */
+router.post(
+  "/purchase",
+  mw.authenticate,
+  async ({ childId, body: { item: itemId } }, res, next) => {
+    const itemToPurchase = await Item.findById(itemId);
+    const child = await Child.findById(childId);
+
+    // Make sure child has enough money to purchase.
+    if (child.balance < itemToPurchase.price)
+      return next(badRequestError("Not enough money"));
+
+    let purchases = await Purchases.findOne({ child: childId });
+
+    // If no purchases exist, create new model.
+    if (!purchases) {
+      purchases = new Purchases({
+        child: childId,
+        items: [],
+      });
+    } else {
+      // Check if child owns the item.
+      if (purchases.items.includes(itemId))
+        return next(badRequestError("Item is already owned"));
+    }
+
+    // Update child's balance.
+    child.balance -= itemToPurchase.price;
+    await child.save();
+
+    // Add new purchase.
+    purchases.items.push(itemId);
+    await purchases.save();
+
+    // Return updated items.
+    await purchases.populate("items").execPopulate();
+    res.json(purchases.items);
+  }
+);
 
 module.exports = router;
