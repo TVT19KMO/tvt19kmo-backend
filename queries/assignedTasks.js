@@ -1,4 +1,3 @@
-const mongoose = require("mongoose");
 const { badRequestError } = require("../app/utils/errors");
 const {
   AssignedTask,
