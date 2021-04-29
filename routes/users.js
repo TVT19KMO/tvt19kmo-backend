@@ -67,7 +67,7 @@ router.post("/login", async ({ body: { username, password } }, res) => {
   if (!(user && passwordCorrect)) return res.status(403).json();
 
   // Return access token and user data.
-  res.status(200).send({ token: user.token });
+  res.status(200).send({ token: user.token, id: user.id });
 });
 
 module.exports = router;
