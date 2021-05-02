@@ -100,10 +100,26 @@ const completeTask = async ({ resource: task }, res) => {
 /**
  * Handles deletion of assigned task.
  */
-const deleteTask = async ({ resource: task }, res) => {
+const deleteTask = async ({ resource: task, userId }, res) => {
   task.deleted = Date.now();
+  const parent = await Parent.findById(userId);
+
+  // Refund coins to parent if task was not finished.
+  if (!task.finished) {
+    await task
+      .populate({
+        path: "task",
+        populate: {
+          path: "difficulty",
+        },
+      })
+      .execPopulate();
+    parent.balance -= task.task.difficulty.reward;
+    parent.save();
+  }
+
   await task.save();
-  res.status(203).end();
+  res.json({ balance: parent.balance });
 };
 
 module.exports = {

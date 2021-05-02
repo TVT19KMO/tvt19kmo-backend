@@ -6,6 +6,7 @@
  *
  * @routes
  * GET  /                   - Returns children of the parent.
+ * GET  /info               - Returns info of the child making the request.
  * POST /                   - Creates a new child.
  * POST /link               - Links child with a parent and allows child to access API.
  * POST /:id/remove-device  - Removes child's linked device.
@@ -34,9 +35,30 @@ const Child = require("../models/child");
  *    {...}
  * ]
  *
- * @errors 400, 401, 500
+ * @errors 401, 500
  */
 router.get("/", mw.authenticate, req.getChildren);
+
+/**
+ * [GET] /
+ * Returns info of the child making the request.
+ *
+ * @request
+ *
+ * @response {Child} info for the child making the request.
+ * @status 200
+ * @example
+ * {
+ *    "id": "1d2j091j02jd09a0j9da90sd",
+ *    "name": "Erkki Esimerkki",
+ *    "balance": 200,
+ *    "code": 12345678,
+ *    "device": "20371082470172410204710274172094"
+ * }
+ *
+ * @errors 401, 500
+ */
+router.get("/info", mw.authenticate, req.getChildInfo);
 
 /**
  * [POST] /
@@ -46,7 +68,7 @@ router.get("/", mw.authenticate, req.getChildren);
  * @field {String} name   - Name of the child to create.
  * @example
  * {
- *    'name': 'Erkki Esimerkki'
+ *    "name": "Erkki Esimerkki"
  * }
  *
  * @response {Child} The created child resouce.
@@ -65,8 +87,8 @@ router.post("/", mw.authenticate, req.addChild);
  * @field {String} device - Unique identifier of the child's device.
  * @example
  * {
- *    'code': 12345678,
- *    'device': '20371082470172410204710274172094'
+ *    "code": 12345678,
+ *    "device": "20371082470172410204710274172094"
  * }
  *
  * @response
@@ -74,7 +96,7 @@ router.post("/", mw.authenticate, req.addChild);
  * @status 200
  * @example
  * {
- *    'token': '90ajs0d99ja00fja0fj09a0s9fj09asjf09j09asfj09
+ *    "token": "90ajs0d99ja00fja0fj09a0s9fj09asjf09j09asfj09"
  * }
  *
  * @errors 400, 500

@@ -31,8 +31,11 @@ const createChild = async (childData) => {
  */
 const getChildByCode = async (code) => await Child.findOne({ code });
 
+const getChildById = async (id) => await Child.findById(id);
+
 module.exports = {
   getChildByCode,
+  getChildById,
   getChildrenForParent,
   createChild,
 };
