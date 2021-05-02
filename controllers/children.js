@@ -59,9 +59,15 @@ const generateChildCode = async ({ resource: child }, res) => {
   res.json({ code: child.code });
 };
 
+const getChildInfo = async ({ childId }, res) => {
+  const child = await q.getChildById(childId);
+  res.json(child);
+};
+
 module.exports = {
   addChild,
   getChildren,
+  getChildInfo,
   linkChild,
   removeChildDevice,
   generateChildCode,
