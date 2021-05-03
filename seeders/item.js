@@ -76,51 +76,9 @@ const data = [
     color: "Black",
     price: 300,
   },
-  {
-    type: "hat",
-    name: "Crown",
-    color: "Yellow",
-    price: 600,
-  },
-  {
-    type: "hat",
-    name: "Helmet",
-    color: "Brown",
-    price: 600,
-  },
-  {
-    type: "hat",
-    name: "Cowboy hat",
-    color: "Brown",
-    price: 600,
-  },
   // SHOES ==============================
   {
     type: "shoe",
-    name: "Classic shoe",
-    color: "Blue",
-    price: 100,
-  },
-  {
-    type: "shoe",
-    name: "Classic shoe",
-    color: "Red",
-    price: 100,
-  },
-  {
-    type: "shoe",
-    name: "Classic shoe",
-    color: "Yellow",
-    price: 100,
-  },
-  {
-    type: "shoe",
-    name: "Classic shoe",
-    color: "Black",
-    price: 100,
-  },
-  {
-    type: "shoe",
     name: "Sneakers",
     color: "Blue",
     price: 300,
@@ -142,12 +100,6 @@ const data = [
     name: "Sneakers",
     color: "Black",
     price: 300,
-  },
-  {
-    type: "shoe",
-    name: "Cowboy boots",
-    color: "Brown",
-    price: 600,
   },
   {
     type: "bottom",
@@ -196,56 +148,8 @@ const data = [
     name: "Jeans",
     color: "Black",
     price: 100,
-  },
-  {
-    type: "bottom",
-    name: "Joggers",
-    color: "Blue",
-    price: 300,
-  },
-  {
-    type: "bottom",
-    name: "Joggers",
-    color: "Red",
-    price: 300,
-  },
-  {
-    type: "bottom",
-    name: "Joggers",
-    color: "Yellow",
-    price: 300,
-  },
-  {
-    type: "bottom",
-    name: "Joggers",
-    color: "Black",
-    price: 300,
   },
   // TOPS ======================
-  {
-    type: "top",
-    name: "T-shirt",
-    color: "Blue",
-    price: 100,
-  },
-  {
-    type: "top",
-    name: "T-shirt",
-    color: "Red",
-    price: 100,
-  },
-  {
-    type: "top",
-    name: "T-shirt",
-    color: "Yellow",
-    price: 100,
-  },
-  {
-    type: "top",
-    name: "T-shirt",
-    color: "Black",
-    price: 100,
-  },
   {
     type: "top",
     name: "Hoodie",
