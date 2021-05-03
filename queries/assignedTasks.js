@@ -114,7 +114,7 @@ const deleteTask = async ({ resource: task, userId }, res) => {
         },
       })
       .execPopulate();
-    parent.balance -= task.task.difficulty.reward;
+    parent.balance += task.task.difficulty.reward;
     parent.save();
   }
 

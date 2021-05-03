@@ -24,7 +24,7 @@ const getTaskDifficultyCount = async (tasks, i18n) => {
   const taskDifficulties = await TaskDifficulty.find({});
 
   // Get difficulties from tasks.
-  const difficulties = _.map(tasks, ({ task }) => task.difficulty);
+  const difficulties = _.map(tasks, ({ task }) => task.difficulty.id);
 
   // Count difficulties by id.
   const difficultiesByCount = _.countBy(difficulties);

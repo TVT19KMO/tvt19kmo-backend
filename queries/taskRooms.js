@@ -24,7 +24,7 @@ const getRoomStatistics = async (tasks, i18n) => {
   const taskRooms = await TaskRoom.find({});
 
   // Get rooms from tasks.
-  const rooms = _.map(tasks, ({ task }) => task.room);
+  const rooms = _.map(tasks, ({ task }) => task.room.id);
 
   // Count rooms by id.
   const roomsByCount = _.countBy(rooms);
